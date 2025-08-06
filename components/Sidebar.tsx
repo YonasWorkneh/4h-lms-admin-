@@ -38,11 +38,11 @@ const Sidebar: React.FC = () => {
       href: "/school-list",
     },
     {
-      id: "calender",
+      id: "semester",
       label: "Semester",
       icon: Calendar,
       count: 2,
-      href: "/calender",
+      href: "/semester",
     },
   ];
 
@@ -53,11 +53,22 @@ const Sidebar: React.FC = () => {
   ];
 
   const pathName = usePathname();
-  // console.log(pathName);
-  // const isIndex = pathName.
+  const nonIndex = [
+    "/settings",
+    "/logout",
+    "/semester",
+    "/school-list",
+    "/course-list",
+  ];
+  const isIndex = !nonIndex.includes(pathName);
+  const isLogin = pathName.includes("login");
 
   return (
-    <div className="w-64 bg-white h-screen shadow-sm border-r border-gray-100 flex flex-col">
+    <div
+      className={`w-64 bg-white h-screen shadow-sm border-r border-gray-100 flex flex-col ${
+        isLogin && "hidden"
+      }`}
+    >
       {/* Logo */}
       <div className="p-6 border-b border-gray-100">
         <div className="flex items-center gap-2">
@@ -116,7 +127,11 @@ const Sidebar: React.FC = () => {
                 <Link
                   href={item.href}
                   key={item.id}
-                  className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors"
+                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors ${
+                    pathName.includes(item.id)
+                      ? "bg-green-50 text-green-700 border-r-2 border-green-600"
+                      : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+                  }`}
                 >
                   <Icon className="w-5 h-5" />
                   <span>{item.label}</span>

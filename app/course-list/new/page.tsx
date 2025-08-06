@@ -93,7 +93,7 @@ export default function NewCoursePage() {
 
   return (
     <div>
-      <div className="container mx-auto px-4 py-8">
+      <div className="container px-4 py-4 max-w-5xl">
         <Btn
           text="Back"
           styles="!rounded-full px-6 py-1 mb-4"
@@ -105,9 +105,9 @@ export default function NewCoursePage() {
           </h1>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div>
           {/* Main Form */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2 space-y-6 max-w-5xl">
             {/* Basic Information */}
             <Card className="border-green-100">
               <CardHeader>
@@ -131,7 +131,7 @@ export default function NewCoursePage() {
                       className="border-green-200 focus:border-green-400 focus:ring-green-400"
                     />
                   </div>
-                  <div className="space-y-2">
+                  {/* <div className="space-y-2">
                     <Label htmlFor="school" className="text-green-800">
                       School *
                     </Label>
@@ -152,7 +152,7 @@ export default function NewCoursePage() {
                         ))}
                       </SelectContent>
                     </Select>
-                  </div>
+                  </div> */}
                 </div>
 
                 <div className="space-y-2">
@@ -169,7 +169,7 @@ export default function NewCoursePage() {
             </Card>
 
             {/* Instructors */}
-            <Card className="border-green-100">
+            {/* <Card className="border-green-100">
               <CardHeader>
                 <CardTitle className="text-green-800 flex items-center">
                   <Users className="w-5 h-5 mr-2" />
@@ -291,10 +291,10 @@ export default function NewCoursePage() {
                   </div>
                 </div>
               </CardContent>
-            </Card>
+            </Card> */}
 
             {/* Course Details */}
-            <Card className="border-green-100">
+            {/* <Card className="border-green-100">
               <CardHeader>
                 <CardTitle className="text-green-800 flex items-center">
                   <Clock className="w-5 h-5 mr-2" />
@@ -341,12 +341,11 @@ export default function NewCoursePage() {
                   </div>
                 </div>
               </CardContent>
-            </Card>
+            </Card> */}
           </div>
 
-          {/* Sidebar */}
-          <div className="space-y-6">
-            {/* Course Image */}
+          {/* Course Image */}
+          <div className="space-y-6 max-w-5xl mt-6">
             <Card className="border-green-100">
               <CardHeader>
                 <CardTitle className="text-green-800">Course Image</CardTitle>

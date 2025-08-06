@@ -2,10 +2,17 @@
 import React from "react";
 import { Search, Mail, Bell } from "lucide-react";
 import SearchBar from "./SearchBar";
+import { usePathname } from "next/navigation";
 
 const Header: React.FC = () => {
+  const pathName = usePathname();
+  const isLogin = pathName.includes("login");
   return (
-    <div className="bg-white border-b border-gray-100 px-8 py-4">
+    <div
+      className={`bg-white border-b border-gray-100 px-8 py-4 ${
+        isLogin && "hidden"
+      }`}
+    >
       <div className="flex items-center justify-between">
         {/* Search Bar */}
         <SearchBar
