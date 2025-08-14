@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Search, Mail, Bell } from "lucide-react";
 import SearchBar from "./SearchBar";
 import { usePathname } from "next/navigation";
@@ -7,6 +7,15 @@ import { usePathname } from "next/navigation";
 const Header: React.FC = () => {
   const pathName = usePathname();
   const isLogin = pathName.includes("login");
+
+  const isLogged = localStorage.getItem("isLogged");
+
+  const [mount, setMount] = useState(false);
+
+  useEffect(() => {
+    if (isLogged) setMount(true);
+  }, [mount]);
+  if (!mount) null;
   return (
     <div
       className={`bg-white border-b border-gray-100 px-8 py-4 ${

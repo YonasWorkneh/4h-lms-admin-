@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   BookOpen,
   Calendar,
@@ -62,7 +62,13 @@ const Sidebar: React.FC = () => {
   ];
   const isIndex = !nonIndex.includes(pathName);
   const isLogin = pathName.includes("login");
+  const isLogged = localStorage.getItem("isLogged");
+  const [mount, setMount] = useState(false);
 
+  useEffect(() => {
+    if (isLogged) setMount(true);
+  }, [mount]);
+  if (!mount) null;
   return (
     <div
       className={`w-64 bg-white h-screen shadow-sm border-r border-gray-100 flex flex-col ${

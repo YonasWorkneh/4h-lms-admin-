@@ -1,5 +1,7 @@
 "use client";
 
+import { useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -11,22 +13,44 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
 import { useState } from "react";
-import { Loader2, Key } from "lucide-react";
-import { signIn } from "@/lib/auth-client";
-import Link from "next/link";
-import { cn } from "@/lib/utils";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 import Image from "next/image";
+import { useForm } from "react-hook-form";
+import { login } from "@/lib/api/auth";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
+  const { handleSubmit, register } = useForm();
+  const queryClient = useQueryClient();
+  const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
+
+  const onSubmit = async (data: { email: string; password: string }) => {
+    try {
+      setLoading(true);
+      console.log(data);
+      const result = await login(data);
+      console.log(result);
+
+      if (!result.error) {
+        queryClient.setQueryData(["user"], result.user);
+        router.push("/");
+        localStorage.setItem("isLogged", JSON.stringify(true));
+      }
+    } catch (err) {
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <div className="h-full flex items-center justify-center">
+    <form
+      className="h-full flex items-center justify-center"
+      onSubmit={handleSubmit(onSubmit)}
+    >
       <Card className="w-[450px]">
         <CardHeader>
           <div className="flex justify-center">
@@ -51,15 +75,13 @@ export default function SignIn() {
                 type="email"
                 placeholder="m@example.com"
                 required
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                }}
                 className="focus-visible:ring-1 focus-visible:ring-green-400 focus-visible:ring-offset-2"
-                value={email}
+                {...register("email")}
               />
             </div>
-
-            <div className="grid gap-2">
+            <div className="grid gap-2 relative">
+              {/* forgot password not sure if we are going to implement it */}
+              {/* 
               <div className="flex items-center">
                 <Label htmlFor="password">Password</Label>
                 <Link
@@ -68,50 +90,29 @@ export default function SignIn() {
                 >
                   Forgot your password?
                 </Link>
-              </div>
+              </div> */}
 
               <Input
                 id="password"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 placeholder="password"
                 autoComplete="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
                 className="focus-visible:ring-1 focus-visible:ring-green-400 focus-visible:ring-offset-2"
+                {...register("password")}
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="absolute inset-y-0 right-2 flex items-center text-gray-500 hover:text-black"
+                tabIndex={-1} // Prevent focus jump
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
             </div>
-
-            <div className="flex items-center gap-2">
-              <Checkbox
-                id="remember"
-                onClick={() => {
-                  setRememberMe(!rememberMe);
-                }}
-                className="data-[state=checked]:bg-green-600 data-[state=checked]:border-green-600"
-              />
-              <Label htmlFor="remember">Remember me</Label>
-            </div>
-
             <Button
               type="submit"
               className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 p-2 px-4 rounded-md text-white"
               disabled={loading}
-              onClick={async () => {
-                await signIn.email(
-                  {
-                    email,
-                    password,
-                  },
-                  {
-                    onRequest: (ctx) => {
-                      setLoading(true);
-                    },
-                    onResponse: (ctx) => {
-                      setLoading(false);
-                    },
-                  }
-                );
-              }}
             >
               {loading ? (
                 <Loader2 size={16} className="animate-spin" />
@@ -119,8 +120,8 @@ export default function SignIn() {
                 <p> Login </p>
               )}
             </Button>
-
-            <div
+            {/* social provider but removed for less work 😁 */}
+            {/* <div
               className={cn(
                 "w-full gap-2 flex items-center",
                 "justify-between flex-col"
@@ -130,22 +131,22 @@ export default function SignIn() {
                 variant="outline"
                 className={cn("w-full gap-2")}
                 disabled={loading}
-                onClick={async () => {
-                  await signIn.social(
-                    {
-                      provider: "google",
-                      callbackURL: "/dashboard",
-                    },
-                    {
-                      onRequest: (ctx) => {
-                        setLoading(true);
-                      },
-                      onResponse: (ctx) => {
-                        setLoading(false);
-                      },
-                    }
-                  );
-                }}
+                // onClick={async () => {
+                //   await signIn.social(
+                //     {
+                //       provider: "google",
+                //       callbackURL: "/dashboard",
+                //     },
+                //     {
+                //       onRequest: (ctx) => {
+                //         setLoading(true);
+                //       },
+                //       onResponse: (ctx) => {
+                //         setLoading(false);
+                //       },
+                //     }
+                //   );
+                // }}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -172,11 +173,11 @@ export default function SignIn() {
                 </svg>
                 Sign in with Google
               </Button>
-            </div>
+            </div> */}
           </div>
         </CardContent>
         <CardFooter></CardFooter>
       </Card>
-    </div>
+    </form>
   );
 }

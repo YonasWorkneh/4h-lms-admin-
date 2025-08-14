@@ -1,11 +1,13 @@
 "use client";
 
+import React from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import Button from "@/components/Button";
 import SchoolCard from "@/components/SchoolCard";
 import SearchBar from "@/components/SearchBar";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import React from "react";
+import Calendar from "@/components/Calendar";
+import SemesterCard from "@/components/SemesterCard";
 
 export default function Page() {
   const schools = [
@@ -85,15 +87,7 @@ export default function Page() {
         </div>
         <ul className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-6">
           {schools.map((course, index) => (
-            <SchoolCard
-              key={index}
-              name={course.name}
-              location={course.location}
-              img={course.img}
-              numStuds={course.numStuds}
-              status={course.status}
-              handleClick={() => router.push(`/school-list/${course.id}`)}
-            />
+            <SemesterCard />
           ))}
         </ul>
       </div>
