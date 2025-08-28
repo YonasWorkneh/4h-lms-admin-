@@ -10,7 +10,7 @@ const StudentList: React.FC = () => {
       course: "Web Develoment",
       status: "Active",
       progress: 92,
-      avatar: "ER",
+      avatar: "EB",
     },
     {
       id: 2,
@@ -19,7 +19,7 @@ const StudentList: React.FC = () => {
       course: "Web Development",
       status: "Active",
       progress: 78,
-      avatar: "MT",
+      avatar: "MA",
     },
     {
       id: 3,
@@ -28,7 +28,7 @@ const StudentList: React.FC = () => {
       course: "Graphics",
       status: "Inactive",
       progress: 45,
-      avatar: "LC",
+      avatar: "ED",
     },
   ];
 

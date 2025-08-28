@@ -11,7 +11,6 @@ export default function ClientRedirect({
   isAuthenticated: boolean;
   children: React.ReactNode;
 }) {
-  console.log("Authentication Status", isAuthenticated);
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const paths = [

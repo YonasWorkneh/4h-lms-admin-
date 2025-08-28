@@ -127,8 +127,8 @@ export default function NewCoursePage() {
                     </Label>
                     <Input
                       id="title"
-                      placeholder="e.g., Web Development"
-                      className="border-green-200 focus:border-green-400 focus:ring-green-400"
+                      placeholder="e.g., Bole Community School"
+                      className="border-green-200 focus-visible:ring-1 focus-visible:ring-green-400 focus-visible:ring-offset-2"
                     />
                   </div>
                 </div>
@@ -140,7 +140,7 @@ export default function NewCoursePage() {
                     <Input
                       id="title"
                       placeholder="e.g., ST Bole 12B"
-                      className="border-green-200 focus:border-green-400 focus:ring-green-400"
+                      className="border-green-200 focus-visible:ring-1 focus-visible:ring-green-400 focus-visible:ring-offset-2"
                     />
                   </div>{" "}
                 </div>
@@ -152,7 +152,7 @@ export default function NewCoursePage() {
                     <Input
                       id="contact"
                       placeholder="e.g., +251 986261979"
-                      className="border-green-200 focus:border-green-400 focus:ring-green-400"
+                      className="border-green-200 focus-visible:ring-1 focus-visible:ring-green-400 focus-visible:ring-offset-2"
                     />
                   </div>
                 </div>

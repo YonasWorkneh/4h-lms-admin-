@@ -42,16 +42,10 @@ export default function CourseCard({
           .
         </p>
         <div className="flex justify-between items-center mt-3">
-          <div className="space-x-2">
+          <div className="space-x-2 flex items-center">
             <Calendar />
-            <span className="text-sm">{start}</span>&mdash;{" "}
-            <span className="text-sm">{end}</span>
+            <span className="text-sm">{start}</span>
           </div>
-          <p className="space-x-2">
-            <Users />
-            <span className="text-sm font-bold">{numStuds}</span>
-            <span>students</span>
-          </p>
         </div>
         <Link href={"#"}>
           <Button text="Details" styles="mt-4" />

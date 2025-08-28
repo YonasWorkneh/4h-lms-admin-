@@ -1,419 +1,228 @@
 "use client";
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { ChevronLeft, ChevronRight, Plus, ChevronDown } from "lucide-react";
+import { useState, useEffect } from "react";
+import CalendarHeader from "./CalendarHeader";
+import CalendarGrid from "./CalendarGrid";
+import EventModal from "./EventModal";
+import { EventDetailsModal } from "./EventDetailsModal";
+import Button from "./Button";
 
-interface Event {
-  id: string;
-  name: string;
-  date: string;
-  color: string;
-}
-
-const eventColors = [
-  "bg-emerald-500",
-  "bg-green-500",
-  "bg-teal-500",
-  "bg-lime-500",
-  "bg-cyan-500",
-];
-
-// Generate sample events for current month
-const generateSampleEvents = () => {
-  const currentYear = new Date().getFullYear();
-  const currentMonth = String(new Date().getMonth() + 1).padStart(2, "0");
-
-  return [
-    {
-      id: "1",
-      name: "Exercise",
-      date: `${currentYear}-${currentMonth}-01`,
-      color: "bg-emerald-500",
-    },
-    {
-      id: "2",
-      name: "Longer Event...",
-      date: `${currentYear}-${currentMonth}-01`,
-      color: "bg-teal-500",
-    },
-    {
-      id: "3",
-      name: "Event one",
-      date: `${currentYear}-${currentMonth}-11`,
-      color: "bg-green-500",
-    },
-    {
-      id: "4",
-      name: "Longer Event...",
-      date: `${currentYear}-${currentMonth}-11`,
-      color: "bg-teal-500",
-    },
-    {
-      id: "5",
-      name: "Event one",
-      date: `${currentYear}-${currentMonth}-11`,
-      color: "bg-lime-500",
-    },
-    {
-      id: "6",
-      name: "Event one",
-      date: `${currentYear}-${currentMonth}-20`,
-      color: "bg-emerald-500",
-    },
-    {
-      id: "7",
-      name: "Longer Event...",
-      date: `${currentYear}-${currentMonth}-20`,
-      color: "bg-teal-500",
-    },
-    {
-      id: "8",
-      name: "Longer Event...",
-      date: `${currentYear}-${currentMonth}-20`,
-      color: "bg-green-500",
-    },
-  ];
+type Event = {
+  id: number;
+  title: string;
+  date: Date;
+  time?: string;
+  description?: string;
 };
+
+const makeDate = (month: number, day: number, year: number) =>
+  new Date(year, month - 1, day);
+
+export const getEthiopianHolidays = (year: number): Event[] => [
+  {
+    id: 1,
+    title: "Enkutatash (New Year)",
+    date: makeDate(9, 11, year),
+    description:
+      "Ethiopian New Year celebration marking the end of the rainy season. (Meskerem 1, 2018 EC)",
+  },
+  {
+    id: 2,
+    title: "Meskel (Finding of the True Cross)",
+    date: makeDate(9, 27, year),
+    description:
+      "Celebration of the discovery of the True Cross by Empress Helena. (Meskerem 17, 2018 EC)",
+  },
+  {
+    id: 3,
+    title: "Genna (Ethiopian Christmas)",
+    date: makeDate(1, 7, year),
+    description:
+      "Ethiopian Orthodox celebration of the birth of Christ. (Tahsas 29, 2017 EC)",
+  },
+  {
+    id: 4,
+    title: "Timket (Epiphany)",
+    date: makeDate(1, 19, year),
+    description:
+      "Commemoration of the baptism of Jesus in the Jordan River. (Tir 11, 2017 EC)",
+  },
+  {
+    id: 5,
+    title: "Siklet (Good Friday)",
+    date: makeDate(4, 18, year),
+    description: "Ethiopian Orthodox Good Friday.",
+  },
+  {
+    id: 6,
+    title: "Tensae (Easter Sunday)",
+    date: makeDate(4, 20, year),
+    description: "Ethiopian Orthodox Easter Sunday celebration.",
+  },
+  {
+    id: 7,
+    title: "Fasika (Orthodox Easter Monday)",
+    date: makeDate(4, 21, year),
+    description: "Ethiopian Orthodox Easter Monday holiday.",
+  },
+  {
+    id: 8,
+    title: "Id al-Fitr (End of Ramadan)",
+    date: makeDate(3, 30, year),
+    description:
+      "Islamic holiday marking the end of Ramadan fasting. (date varies yearly)",
+  },
+  {
+    id: 9,
+    title: "Id al-Adha (Sacrifice Feast)",
+    date: makeDate(6, 6, year),
+    description:
+      "Islamic Feast of Sacrifice, commemorating the trial of Abraham. (date varies yearly)",
+  },
+  {
+    id: 10,
+    title: "Victory of Adwa",
+    date: makeDate(3, 2, year),
+    description:
+      "Commemoration of Ethiopia's victory over Italian forces in 1896. (Yekatit 23, 1917 EC)",
+  },
+  {
+    id: 11,
+    title: "Labour Day",
+    date: makeDate(5, 1, year),
+    description: "International Workers' Day celebrated in Ethiopia.",
+  },
+  {
+    id: 12,
+    title: "Patriots' Victory Day",
+    date: makeDate(5, 5, year),
+    description:
+      "Commemoration of Ethiopian patriots' victory over Italian occupation.",
+  },
+  {
+    id: 13,
+    title: "Derg Downfall Day",
+    date: makeDate(5, 28, year),
+    description:
+      "Celebration of the fall of the Derg regime in 1991. (Ginbot 20, 1983 EC)",
+  },
+];
 
 export default function Calendar() {
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [events, setEvents] = useState<Event[]>(generateSampleEvents());
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<string>("");
-  const [eventName, setEventName] = useState("");
-  const [showYearDropdown, setShowYearDropdown] = useState(false);
+  const [detailOpened, setDetailOpened] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+  const [events, setEvents] = useState<Array<Event>>(
+    getEthiopianHolidays(new Date().getFullYear())
+  );
 
-  const monthNames = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
+  // 👇 Update holidays automatically when currentDate's year changes
+  useEffect(() => {
+    setEvents((prev) => {
+      // keep user-created events from prev state
+      const userEvents = prev.filter((e) => e.id >= 10000);
+      return [
+        ...getEthiopianHolidays(currentDate.getFullYear()),
+        ...userEvents,
+      ];
+    });
+  }, [currentDate]);
 
-  const dayNames = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
-
-  const getDaysInMonth = (date: Date) => {
-    return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+  const goToToday = () => {
+    setCurrentDate(new Date());
   };
 
-  const getFirstDayOfMonth = (date: Date) => {
-    return new Date(date.getFullYear(), date.getMonth(), 1).getDay();
-  };
-
-  const formatDate = (year: number, month: number, day: number) => {
-    return `${year}-${String(month + 1).padStart(2, "0")}-${String(
-      day
-    ).padStart(2, "0")}`;
-  };
-
-  const getEventsForDate = (dateString: string) => {
-    return events.filter((event) => event.date === dateString);
-  };
-
-  const handleDateClick = (day: number) => {
-    const dateString = formatDate(
-      currentDate.getFullYear(),
-      currentDate.getMonth(),
-      day
+  const goToPreviousMonth = () => {
+    setCurrentDate(
+      new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1)
     );
-    setSelectedDate(dateString);
+  };
+
+  const goToNextMonth = () => {
+    setCurrentDate(
+      new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1)
+    );
+  };
+
+  const handleDateClick = (date: Date) => {
+    setSelectedDate(date);
+    setSelectedEvent(null);
     setIsModalOpen(true);
   };
 
-  const handleAddEvent = () => {
-    if (eventName.trim() && selectedDate) {
+  const handleCreateEvent = (eventData: {
+    title: string;
+    time?: string;
+    description?: string;
+  }) => {
+    if (selectedDate) {
       const newEvent: Event = {
-        id: Date.now().toString(),
-        name: eventName.trim(),
+        id: Math.floor(Math.random() * 10000) + 10000, // ensure different ID space from holidays
+        title: eventData.title,
         date: selectedDate,
-        color: eventColors[Math.floor(Math.random() * eventColors.length)],
+        time: eventData.time,
+        description: eventData.description,
       };
-      setEvents([...events, newEvent]);
-      setEventName("");
-      setIsModalOpen(false);
+      setEvents((prev) => [...prev, newEvent]);
     }
+    setIsModalOpen(false);
+    setSelectedDate(null);
   };
 
-  const navigateMonth = (direction: "prev" | "next") => {
-    setCurrentDate((prev) => {
-      const newDate = new Date(prev);
-      if (direction === "prev") {
-        newDate.setMonth(prev.getMonth() - 1);
-      } else {
-        newDate.setMonth(prev.getMonth() + 1);
-      }
-      return newDate;
-    });
+  const handleEventClick = (id: number) => {
+    setSelectedDate(null);
+    setSelectedEvent(events.find((event) => event.id === id) || null);
+    setDetailOpened(true);
   };
 
-  const handleYearChange = (year: number) => {
-    setCurrentDate((prev) => {
-      const newDate = new Date(prev);
-      newDate.setFullYear(year);
-      return newDate;
-    });
-    setShowYearDropdown(false);
-  };
-
-  const generateYearOptions = () => {
-    const currentYear = new Date().getFullYear();
-    const years = [];
-    for (let i = currentYear - 10; i <= currentYear + 10; i++) {
-      years.push(i);
-    }
-    return years;
-  };
-
-  const renderCalendarDays = () => {
-    const daysInMonth = getDaysInMonth(currentDate);
-    const firstDay = getFirstDayOfMonth(currentDate);
-    const days = [];
-
-    // Empty cells for days before the first day of the month
-    for (let i = 0; i < firstDay; i++) {
-      const prevMonth = new Date(
-        currentDate.getFullYear(),
-        currentDate.getMonth() - 1,
-        0
-      );
-      const prevMonthDay = prevMonth.getDate() - (firstDay - i - 1);
-      days.push(
-        <div
-          key={`prev-${i}`}
-          className="h-24 p-2 text-gray-400 border border-gray-100"
-        >
-          <div className="text-sm">{prevMonthDay}</div>
-        </div>
-      );
-    }
-
-    // Days of the current month
-    for (let day = 1; day <= daysInMonth; day++) {
-      const dateString = formatDate(
-        currentDate.getFullYear(),
-        currentDate.getMonth(),
-        day
-      );
-      const dayEvents = getEventsForDate(dateString);
-
-      days.push(
-        <div
-          key={day}
-          className="h-24 p-2 border border-gray-100 cursor-pointer hover:bg-green-50 transition-colors"
-          onClick={() => handleDateClick(day)}
-        >
-          <div className="text-sm font-medium text-gray-900 mb-1">{day}</div>
-          <div className="space-y-1">
-            {dayEvents.slice(0, 3).map((event) => (
-              <div key={event.id} className="flex items-center gap-1">
-                <div className={`w-2 h-2 rounded-full ${event.color}`}></div>
-                <span className="text-xs text-gray-600 truncate">
-                  {event.name}
-                </span>
-              </div>
-            ))}
-            {dayEvents.length > 3 && (
-              <div className="text-xs text-gray-500">
-                +{dayEvents.length - 3} more
-              </div>
-            )}
-          </div>
-        </div>
-      );
-    }
-
-    // Fill remaining cells with next month's days
-    const totalCells = Math.ceil((firstDay + daysInMonth) / 7) * 7;
-    for (let day = 1; days.length < totalCells; day++) {
-      days.push(
-        <div
-          key={`next-${day}`}
-          className="h-24 p-2 text-gray-400 border border-gray-100"
-        >
-          <div className="text-sm">{day}</div>
-        </div>
-      );
-    }
-
-    return days;
+  const handleDelete = (id: number) => {
+    setEvents((prev) => prev.filter((event) => event.id !== id));
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white min-h-screen">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white p-4 rounded-t-lg flex items-center justify-between">
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => navigateMonth("prev")}
-          className="text-white hover:bg-white/20"
-        >
-          <ChevronLeft className="w-4 h-4 mr-1" />
-          {currentDate.getMonth() === 0
-            ? "Dec"
-            : monthNames[currentDate.getMonth() - 1]}
-        </Button>
+    <>
+      <div className="flex bg-white/50 p-2">
+        {/* Main Calendar */}
+        <div className="flex-1 flex flex-col">
+          <CalendarHeader
+            currentDate={currentDate}
+            onToday={goToToday}
+            onPrevious={goToPreviousMonth}
+            onNext={goToNextMonth}
+          />
 
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2">
-            <h2 className="text-xl font-semibold">
-              {monthNames[currentDate.getMonth()]}
-            </h2>
-            <div className="relative">
-              <button
-                onClick={() => setShowYearDropdown(!showYearDropdown)}
-                className="flex items-center gap-1 text-xl font-semibold hover:bg-white/20 px-2 py-1 rounded transition-colors"
-              >
-                {currentDate.getFullYear()}
-                <ChevronDown className="w-4 h-4" />
-              </button>
-              {showYearDropdown && (
-                <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-48 overflow-y-auto min-w-[100px]">
-                  {generateYearOptions().map((year) => (
-                    <button
-                      key={year}
-                      onClick={() => handleYearChange(year)}
-                      className={`block w-full px-4 py-2 text-left text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors ${
-                        year === currentDate.getFullYear()
-                          ? "bg-green-100 text-green-700 font-medium"
-                          : ""
-                      }`}
-                    >
-                      {year}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setIsModalOpen(true)}
-            className="text-white hover:bg-white/20"
-          >
-            <Plus className="w-4 h-4" />
-          </Button>
+          <CalendarGrid
+            currentDate={currentDate}
+            events={events}
+            onDateClick={handleDateClick}
+            onEventClick={handleEventClick}
+          />
         </div>
 
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => navigateMonth("next")}
-          className="text-white hover:bg-white/20"
-        >
-          {currentDate.getMonth() === 11
-            ? "Jan"
-            : monthNames[currentDate.getMonth() + 1]}
-          <ChevronRight className="w-4 h-4 ml-1" />
-        </Button>
-      </div>
-
-      {/* Calendar Grid */}
-      <div className="border border-gray-200 rounded-b-lg overflow-hidden bg-white">
-        {/* Day Headers */}
-        <div className="grid grid-cols-7 bg-green-50">
-          {dayNames.map((day) => (
-            <div
-              key={day}
-              className="p-3 text-center text-sm font-medium text-green-700 border-r border-gray-200 last:border-r-0"
-            >
-              {day}
-            </div>
-          ))}
-        </div>
-
-        {/* Calendar Days */}
-        <div className="grid grid-cols-7 bg-white">{renderCalendarDays()}</div>
-      </div>
-
-      {/* Overlay to close dropdown */}
-      {showYearDropdown && (
-        <div
-          className="fixed inset-0 z-40"
-          onClick={() => setShowYearDropdown(false)}
+        <EventModal
+          isOpen={isModalOpen}
+          onClose={() => {
+            setIsModalOpen(false);
+            setSelectedDate(null);
+          }}
+          onSave={handleCreateEvent}
+          selectedDate={selectedDate}
         />
-      )}
-
-      {/* Add Event Modal */}
-      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="text-green-700">Add New Event</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <div>
-              <Label
-                htmlFor="date"
-                className="text-sm font-medium text-gray-700"
-              >
-                Selected Date
-              </Label>
-              <Input
-                id="date"
-                value={
-                  selectedDate
-                    ? new Date(selectedDate + "T00:00:00").toLocaleDateString()
-                    : ""
-                }
-                disabled={selectedDate ? true : false}
-                className="mt-1 focus-visible:ring-1 focus-visible:ring-green-400 focus-visible:ring-offset-2"
-              />
-            </div>
-            <div>
-              <Label
-                htmlFor="eventName"
-                className="text-sm font-medium text-gray-700"
-              >
-                Event Name
-              </Label>
-              <Input
-                id="eventName"
-                value={eventName}
-                onChange={(e) => setEventName(e.target.value)}
-                placeholder="Enter event name..."
-                className="mt-1 focus-visible:ring-1 focus-visible:ring-green-400 focus-visible:ring-offset-2"
-                onKeyDown={(e) => e.key === "Enter" && handleAddEvent()}
-              />
-            </div>
-            <div className="flex gap-2 justify-end">
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setIsModalOpen(false);
-                  setEventName("");
-                }}
-              >
-                Cancel
-              </Button>
-              <Button
-                onClick={handleAddEvent}
-                disabled={!eventName.trim()}
-                className="bg-green-600 hover:bg-green-700"
-              >
-                Add Event
-              </Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
-    </div>
+        <EventDetailsModal
+          isOpen={detailOpened}
+          event={selectedEvent}
+          onClose={() => {
+            setSelectedEvent(null);
+            setDetailOpened(false);
+          }}
+          onDelete={handleDelete}
+        />
+      </div>
+      <div className="bg-white/50 p-8">
+        <Button text="Submit Calendar" />
+      </div>
+    </>
   );
 }

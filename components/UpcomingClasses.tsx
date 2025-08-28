@@ -32,7 +32,9 @@ const UpcomingClasses: React.FC = () => {
   return (
     <div className="bg-white rounded-xl p-6 border border-gray-100">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-semibold text-gray-900">Today's Classes</h3>
+        <h3 className="text-lg font-semibold text-gray-900">
+          Semester Classes
+        </h3>
         <div className="flex items-center gap-2 text-sm text-gray-500">
           <Calendar className="w-4 h-4" />
           <span>March 15, 2024</span>
@@ -67,11 +69,11 @@ const UpcomingClasses: React.FC = () => {
                 </div>
               </div>
 
-              {index === 0 && (
+              {/* {index === 0 && (
                 <button className="px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors">
                   Start Class
                 </button>
-              )}
+              )} */}
             </div>
           </div>
         ))}

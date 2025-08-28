@@ -16,7 +16,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      console.log("getting in dsa")
+      console.log("getting in dsa");
       setMounted(true);
     } else {
       router.push("/login");
@@ -33,7 +33,7 @@ export default function Dashboard() {
             Dashboard
           </h1>
           <p className="text-gray-600">
-            Manage your courses, students, and teaching activities with ease.
+            Manage courses, students, and teaching activities with ease.
           </p>
         </div>
       </div>
@@ -48,22 +48,17 @@ export default function Dashboard() {
           isHighlighted={true}
         />
         <MetricCard
+          title="Active Schools"
+          value="5"
+          subtitle="Needs Attention"
+        />
+        <MetricCard
           title="Active Students"
-          value="284"
+          value="500"
           change="Increased from last month"
           trend="up"
         />
-        <MetricCard
-          title="Completed Assignments"
-          value="156"
-          change="Increased from last week"
-          trend="up"
-        />
-        <MetricCard
-          title="Pending Reviews"
-          value="23"
-          subtitle="Needs Attention"
-        />
+        <MetricCard title="Volunteers" value="56" change="" trend="up" />
       </div>
 
       {/* Main Content Grid */}

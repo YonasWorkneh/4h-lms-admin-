@@ -9,6 +9,7 @@ import {
   GraduationCap,
   FileText,
   School,
+  Users,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -43,6 +44,12 @@ const Sidebar: React.FC = () => {
       icon: Calendar,
       count: 2,
       href: "/semester",
+    },
+    {
+      id: "volunteer-list",
+      label: "Volunteers",
+      icon: Users,
+      href: "/volunteer-list",
     },
   ];
 

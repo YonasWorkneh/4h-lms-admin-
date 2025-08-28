@@ -128,7 +128,7 @@ export default function NewCoursePage() {
                     <Input
                       id="title"
                       placeholder="e.g., Complete Web Development Bootcamp"
-                      className="border-green-200 focus:border-green-400 focus:ring-green-400"
+                      className="border-green-200 focus-visible:ring-1 focus-visible:ring-green-400 focus-visible:ring-offset-2"
                     />
                   </div>
                   {/* <div className="space-y-2">
@@ -162,186 +162,11 @@ export default function NewCoursePage() {
                   <Textarea
                     id="description"
                     placeholder="Provide a comprehensive description of what students will learn..."
-                    className="border-green-200 focus:border-green-400 focus:ring-green-400 min-h-[120px]"
+                    className="border-green-200 focus-visible:ring-1 focus-visible:ring-green-400 focus-visible:ring-offset-2 min-h-[120px]"
                   />
                 </div>
               </CardContent>
             </Card>
-
-            {/* Instructors */}
-            {/* <Card className="border-green-100">
-              <CardHeader>
-                <CardTitle className="text-green-800 flex items-center">
-                  <Users className="w-5 h-5 mr-2" />
-                  Instructors
-                </CardTitle>
-                <CardDescription className="text-green-600">
-                  Assign main instructor and assistant for this course
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="main-instructor" className="text-green-800">
-                      Main Instructor *
-                    </Label>
-                    <Select
-                      value={selectedMainInstructor}
-                      onValueChange={setSelectedMainInstructor}
-                    >
-                      <SelectTrigger className="border-green-200 focus:border-green-400 focus:ring-green-400">
-                        <SelectValue placeholder="Select main instructor" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {instructors.map((instructor) => (
-                          <SelectItem key={instructor.id} value={instructor.id}>
-                            <div className="flex flex-col">
-                              <span className="font-medium">
-                                {instructor.name}
-                              </span>
-                              <span className="text-sm text-green-600">
-                                {instructor.expertise} • ⭐
-                              </span>
-                            </div>
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="assistant" className="text-green-800">
-                      Assistant Instructors
-                    </Label>
-                    <div className="flex gap-2">
-                      <Select
-                        value={currentAssistant}
-                        onValueChange={setCurrentAssistant}
-                      >
-                        <SelectTrigger className="border-green-200 focus:border-green-400 focus:ring-green-400">
-                          <SelectValue placeholder="Select assistant instructor" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {instructors
-                            .filter(
-                              (instructor) =>
-                                instructor.id !== selectedMainInstructor &&
-                                !selectedAssistants.includes(instructor.id)
-                            )
-                            .map((instructor) => (
-                              <SelectItem
-                                key={instructor.id}
-                                value={instructor.id}
-                              >
-                                <div className="flex flex-col">
-                                  <span className="font-medium">
-                                    {instructor.name}
-                                  </span>
-                                  <span className="text-sm text-green-600">
-                                    {instructor.expertise} • ⭐{" "}
-                                  </span>
-                                </div>
-                              </SelectItem>
-                            ))}
-                        </SelectContent>
-                      </Select>
-                      <Button
-                        type="button"
-                        onClick={addAssistant}
-                        disabled={!currentAssistant}
-                        className="bg-[var(--primary-color)] hover:bg-[var(--primary-color)]/80"
-                      >
-                        <Plus className="w-4 h-4" />
-                      </Button>
-                    </div>
-
-                    {selectedAssistants.length > 0 && (
-                      <div className="space-y-2">
-                        <Label className="text-green-800 text-sm">
-                          Selected Assistants:
-                        </Label>
-                        <div className="flex flex-wrap gap-2">
-                          {selectedAssistants.map((assistantId) => {
-                            const assistant = instructors.find(
-                              (instructor) => instructor.id === assistantId
-                            );
-                            return (
-                              <Badge
-                                key={assistantId}
-                                variant="outline"
-                                className="border-green-200 text-green-700 pr-1"
-                              >
-                                <div className="flex items-center">
-                                  <span className="mr-2">
-                                    {assistant?.name}
-                                  </span>
-                                  <button
-                                    onClick={() => removeAssistant(assistantId)}
-                                    className="hover:text-red-500 transition-colors"
-                                    type="button"
-                                  >
-                                    <X className="w-3 h-3" />
-                                  </button>
-                                </div>
-                              </Badge>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </CardContent>
-            </Card> */}
-
-            {/* Course Details */}
-            {/* <Card className="border-green-100">
-              <CardHeader>
-                <CardTitle className="text-green-800 flex items-center">
-                  <Clock className="w-5 h-5 mr-2" />
-                  Course Details
-                </CardTitle>
-                <CardDescription className="text-green-600">
-                  Duration, and maximum intake information
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="start-date" className="text-green-800">
-                      Start Date *
-                    </Label>
-                    <Input
-                      id="start-date"
-                      type="date"
-                      className="border-green-200 focus:border-green-400 focus:ring-green-400"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="end-date" className="text-green-800">
-                      End Date
-                    </Label>
-                    <Input
-                      id="end-date"
-                      type="date"
-                      className="border-green-200 focus:border-green-400 focus:ring-green-400"
-                    />
-                  </div>
-                </div>
-                <div className="grid md:grid-cols-3 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="max-students" className="text-green-800">
-                      Max Students
-                    </Label>
-                    <Input
-                      id="max-students"
-                      type="number"
-                      placeholder="100"
-                      className="border-green-200 focus:border-green-400 focus:ring-green-400"
-                    />
-                  </div>
-                </div>
-              </CardContent>
-            </Card> */}
           </div>
 
           {/* Course Image */}

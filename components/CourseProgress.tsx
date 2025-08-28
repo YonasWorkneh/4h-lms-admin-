@@ -1,15 +1,17 @@
-import React from 'react'
+import React from "react";
 
 const CourseProgress: React.FC = () => {
-  const progress = 73
-  const circumference = 2 * Math.PI * 45
-  const strokeDasharray = circumference
-  const strokeDashoffset = circumference - (progress / 100) * circumference
+  const progress = 73;
+  const circumference = 2 * Math.PI * 45;
+  const strokeDasharray = circumference;
+  const strokeDashoffset = circumference - (progress / 100) * circumference;
 
   return (
     <div className="bg-white rounded-xl p-6 border border-gray-100">
-      <h3 className="text-lg font-semibold text-gray-900 mb-6">Course Progress</h3>
-      
+      <h3 className="text-lg font-semibold text-gray-900 mb-6">
+        Semester Progress
+      </h3>
+
       <div className="flex items-center justify-center mb-6">
         <div className="relative w-32 h-32">
           <svg className="w-32 h-32 transform -rotate-90" viewBox="0 0 100 100">
@@ -43,15 +45,17 @@ const CourseProgress: React.FC = () => {
             </defs>
           </svg>
           <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-2xl font-bold text-gray-900">{progress}%</span>
+            <span className="text-2xl font-bold text-gray-900">
+              {progress}%
+            </span>
           </div>
         </div>
       </div>
-      
+
       <div className="text-center mb-4">
         <p className="text-sm font-medium text-gray-900">Semester Progress</p>
       </div>
-      
+
       <div className="space-y-2">
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 bg-green-500 rounded-full"></div>
@@ -67,7 +71,7 @@ const CourseProgress: React.FC = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default CourseProgress
+export default CourseProgress;
