@@ -8,6 +8,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Clock, AlignLeft } from "lucide-react";
 import { start } from "repl";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
 
 interface EventModalProps {
   isOpen: boolean;
@@ -19,6 +26,12 @@ interface EventModalProps {
   }) => void;
   selectedDate: Date | null;
 }
+
+const events = [
+  { id: "1", name: "4H Day" },
+  { id: "2", name: "Carrer Day" },
+  { id: "3", name: "Trip" },
+];
 
 export default function EventModal({
   isOpen,
@@ -116,27 +129,47 @@ export default function EventModal({
                 End Date
               </TabsTrigger>
               <TabsTrigger
-                value="event"
-                className="rounded-full data-[state=active]:bg-white data-[state=active]:text-black"
-              >
-                Event
-              </TabsTrigger>
-              <TabsTrigger
                 value="classDate"
                 className="rounded-full data-[state=active]:bg-white data-[state=active]:text-black"
               >
                 Class Date
               </TabsTrigger>
+              <TabsTrigger
+                value="event"
+                className="rounded-full data-[state=active]:bg-white data-[state=active]:text-black"
+              >
+                Event
+              </TabsTrigger>
             </TabsList>
 
             {/* Event Tab → Editable title */}
             <TabsContent value="event" className="space-y-4 mt-4">
-              <Input
-                placeholder="Add title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                className="border-0 border-b border-gray-200 rounded-none px-0 focus-visible:ring-0 focus-visible:border-green-600"
-              />
+              <Select
+                onValueChange={(id) => {
+                  const selected = events.find(
+                    (event) => event.id.toString() === id
+                  );
+                  if (selected) setTitle(selected.name);
+                }}
+              >
+                <SelectTrigger
+                  id="term"
+                  className="border-0 border-b px-0 text-lg font-medium rounded-none border-green-400 focus-visible:ring-1 focus-visible:ring-green-400 focus-visible:ring-offset-2 w-full mt-1"
+                >
+                  <SelectValue placeholder="Add Event" />
+                </SelectTrigger>
+                <SelectContent className="focus-visible:ring-green-400 focus-visible:ring-offset-2">
+                  {events.map((event) => (
+                    <SelectItem
+                      key={event.id}
+                      value={event.id}
+                      className="focus-visible:ring-green-400 focus-visible:ring-offset-2"
+                    >
+                      {event.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
               <div className="flex items-center gap-3 py-2">
                 <Clock className="w-4 h-4 text-gray-500" />
                 <div className="flex-1">
