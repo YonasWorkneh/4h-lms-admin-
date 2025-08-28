@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -19,9 +19,21 @@ import { BookOpen, Calendar } from "lucide-react";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import Button from "./Button";
+import { useSemesterStore } from "@/store/semester";
 
 export default function SemesterSetUp() {
-  const [term, setTerm] = useState("first");
+  const { semester, setSemester } = useSemesterStore();
+  const [yearInput, setYearInput] = useState(semester.year);
+  const [termInput, setTermInput] = useState(semester.term);
+
+  const handleAddSemester = () => {
+    // Send To Backend
+  };
+  useEffect(
+    () => setSemester({ year: yearInput, term: termInput }),
+    [termInput, yearInput]
+  );
+
   return (
     <div>
       <Card className="border-green-200 bg-white/50 shadow-none">
@@ -36,7 +48,7 @@ export default function SemesterSetUp() {
         </CardHeader>
         <CardContent className="space-y-6 grid grid-cols-1">
           <div>
-            <div className="space-y-2 w-full">
+            <div className="space-y-1 w-full">
               <Label htmlFor="year" className="text-green-800">
                 Semester Year *
               </Label>
@@ -46,6 +58,8 @@ export default function SemesterSetUp() {
                 pattern="\d{4}"
                 placeholder="YYYY"
                 className="border-green-400 w-1/2 focus-visible:ring-1 focus-visible:ring-green-400 focus-visible:ring-offset-2"
+                value={yearInput}
+                onChange={(e) => setYearInput(e.target.value)}
               />
             </div>
           </div>
@@ -53,10 +67,10 @@ export default function SemesterSetUp() {
             <Label htmlFor="term" className="text-green-800">
               Semester Term *
             </Label>
-            <Select value={term} onValueChange={setTerm}>
+            <Select value={termInput} onValueChange={setTermInput}>
               <SelectTrigger
                 id="term"
-                className="border-green-400 focus-visible:ring-1 focus-visible:ring-green-400 focus-visible:ring-offset-2 w-1/2"
+                className="border-green-400 focus-visible:ring-1 focus-visible:ring-green-400 focus-visible:ring-offset-2 w-1/2 mt-1"
               >
                 <SelectValue placeholder="Select term" />
               </SelectTrigger>
@@ -85,7 +99,7 @@ export default function SemesterSetUp() {
           <Button
             text="Add Semester"
             styles="w-1/2"
-            //    onClick={} add sem to BE -YW
+            onClick={handleAddSemester}
           />
         </CardContent>
       </Card>

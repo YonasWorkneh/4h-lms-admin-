@@ -8,6 +8,8 @@ import { useRouter } from "next/navigation";
 import Calendar from "@/components/Calendar";
 import CalendarSetUp from "@/components/CalendarSetUp";
 import SemesterSetUp from "@/components/SemesterSetUp";
+import SchoolSelect from "@/components/SchoolSelect";
+import ClassSetUp from "@/components/ClassSetUp";
 
 // Mock data for dropdowns
 const schools = [
@@ -28,17 +30,11 @@ const instructors = [
 ];
 
 export default function NewSemesterPage() {
-  const [selectedSchool, setSelectedSchool] = useState("");
-  const [selectedMainInstructor, setSelectedMainInstructor] = useState("");
-  const [selectedAssistants, setSelectedAssistants] = useState<string[]>([]);
-  const [currentAssistant, setCurrentAssistant] = useState("");
-  const thumbnail = useRef<HTMLInputElement>(null);
-  const [image, setImage] = useState<any | null>(null);
   const [step, setStep] = useState(0); // start at step 0
   const router = useRouter();
 
   // Steps stored as component functions
-  const formSteps = [SemesterSetUp, CalendarSetUp, StepThree];
+  const formSteps = [SemesterSetUp, CalendarSetUp, SchoolSelect, ClassSetUp];
   const CurrentFormComponent = formSteps[step];
 
   return (
@@ -58,20 +54,25 @@ export default function NewSemesterPage() {
               { label: "Semester", step: 0 },
               { label: "Calendar", step: 1 },
               { label: "Schools", step: 2 },
-              { label: "Courses", step: 3 },
+              { label: "Class", step: 3 },
             ].map((item, idx) => (
               <button
                 key={item.label}
                 type="button"
                 onClick={() => setStep(idx)}
-                className={`pb-1 border-b-2 transition-colors ${
-                  step === idx
-                    ? "border-green-600 text-green-700 font-semibold"
-                    : "border-transparent text-gray-500 hover:text-green-700"
-                }`}
-                disabled={idx > formSteps.length} // disable future steps if not implemented
+                className={`pb-1 transition-colors `}
+                disabled={idx > formSteps.length}
               >
-                {item.label} /
+                <span
+                  className={`border-b transistion ${
+                    step === idx
+                      ? "border-green-600 text-green-700 font-semibold"
+                      : "border-transparent text-gray-400 hover:text-green-700"
+                  }`}
+                >
+                  {item.label}
+                </span>{" "}
+                <span className="text-gray-400">/</span>
               </button>
             ))}
           </nav>

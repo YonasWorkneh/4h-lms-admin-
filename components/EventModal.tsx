@@ -70,7 +70,7 @@ export default function EventModal({
     setDescription("");
     setShowTimeInput(false);
     setShowDescriptionInput(false);
-    setCurrentTab("event");
+    setCurrentTab("classDate");
   };
 
   const formatDate = (date: Date | null) => {

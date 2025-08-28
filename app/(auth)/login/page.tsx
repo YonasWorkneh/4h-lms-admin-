@@ -31,10 +31,7 @@ export default function SignIn() {
   const onSubmit = async (data: { email: string; password: string }) => {
     try {
       setLoading(true);
-      console.log(data);
       const result = await login(data);
-      console.log(result);
-
       if (!result.error) {
         queryClient.setQueryData(["user"], result.user);
         router.push("/");

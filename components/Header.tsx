@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Search, Mail, Bell } from "lucide-react";
 import SearchBar from "./SearchBar";
 import { usePathname } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
 
 const Header: React.FC = () => {
   const pathName = usePathname();
@@ -11,6 +12,7 @@ const Header: React.FC = () => {
   const isLogged = localStorage.getItem("isLogged");
 
   const [mount, setMount] = useState(false);
+  const { data } = useQuery({ queryKey: ["user"] });
 
   useEffect(() => {
     if (isLogged) setMount(true);
@@ -38,11 +40,22 @@ const Header: React.FC = () => {
           {/* User Profile */}
           <div className="flex items-center gap-3 pl-4 border-l border-gray-200">
             <div className="text-right">
-              <p className="text-sm font-medium text-gray-900">Beza Tesfaye</p>
-              <p className="text-xs text-gray-500">beza.tesfaye@asfwa.edu</p>
+              <p className="text-sm font-medium text-gray-900">
+                {data?.name || "Beza Tesfaye"}
+              </p>
+              <p className="text-xs text-gray-500">
+                {data?.email || "beza.tesfaye@asfwa.com"}
+              </p>
             </div>
             <div className="w-10 h-10 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center">
-              <span className="text-white font-medium text-sm">BT</span>
+              <span className="text-white font-medium text-sm">
+                {data?.name
+                  ? data.name
+                      .split(" ")
+                      .map((parts: string) => parts[0])
+                      .join("")
+                  : "BT"}
+              </span>
             </div>
           </div>
         </div>
