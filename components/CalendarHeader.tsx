@@ -34,7 +34,7 @@ export default function CalendarHeader({
         <Button
           variant="outline"
           onClick={onToday}
-          className="text-gray-700 border-none bg-white/20 hover:bg-white/40 hover:text-white"
+          className="text-green-900 border-none bg-white/20 hover:bg-white/40 rounded-full"
         >
           Today
         </Button>

@@ -10,6 +10,7 @@ import {
   FileText,
   School,
   Users,
+  LayoutDashboard,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -20,14 +21,14 @@ const Sidebar: React.FC = () => {
     {
       id: "dashboard",
       label: "Dashboard",
-      icon: BookOpen,
+      icon: LayoutDashboard,
       count: null,
       href: "/",
     },
     {
       id: "course-list",
       label: "Courses",
-      icon: GraduationCap,
+      icon: BookOpen,
       count: null,
       href: "/course-list",
     },
@@ -44,6 +45,12 @@ const Sidebar: React.FC = () => {
       icon: Calendar,
       count: 2,
       href: "/semester",
+    },
+    {
+      id: "students",
+      label: "Students",
+      icon: GraduationCap,
+      href: "/students",
     },
     {
       id: "volunteer-list",

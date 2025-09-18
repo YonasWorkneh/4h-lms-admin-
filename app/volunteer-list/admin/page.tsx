@@ -20,18 +20,10 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Textarea } from "@/components/ui/textarea";
 import Image from "next/image";
 import { Upload, Pencil } from "lucide-react";
 
-const fields = [
-  "Marketing",
-  "Web Development",
-  "Scratch",
-  "MIoT",
-  "3D Modelling",
-];
+const fields = ["Admin", "Main Instructor", "Assistant Instructor"];
 
 export default function StudentRegistrationForm() {
   const [status, setStatus] = useState("Active");
@@ -49,7 +41,7 @@ export default function StudentRegistrationForm() {
       />
 
       <h1 className="text-2xl font-bold text-green-900 mb-6">
-        Register New Student
+        Register New Volunteer
       </h1>
 
       <div className="grid lg:grid-cols-3 gap-8">
@@ -58,90 +50,70 @@ export default function StudentRegistrationForm() {
           <Card className="border-green-100">
             <CardHeader>
               <CardTitle className="text-green-800">
-                Student Information
+                Volunteer Information
               </CardTitle>
               <CardDescription className="text-green-600">
-                Enter basic student details
+                Enter basic volunteer details
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label className="text-green-800">Name *</Label>
-                  <Input placeholder="Full Name" className="border-green-200" />
+                  <Input
+                    placeholder="Full Name"
+                    className="border-green-200 focus-visible:ring-1 focus-visible:ring-green-400 focus-visible:ring-offset-2"
+                  />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-green-800">Grade *</Label>
+                  <Label className="text-green-800">Field of Study *</Label>
                   <Input
-                    type="number"
-                    placeholder="e.g 12"
-                    className="border-green-200"
+                    type="text"
+                    placeholder="e.g Engineering"
+                    className="border-green-200 focus-visible:ring-1 focus-visible:ring-green-400 focus-visible:ring-offset-2"
                   />
                 </div>
               </div>
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label className="text-green-800">Phone *</Label>
-                  <Input placeholder="phone no." className="border-green-200" />
+                  <Input
+                    placeholder="phone no."
+                    className="border-green-200 focus-visible:ring-1 focus-visible:ring-green-400 focus-visible:ring-offset-2"
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label className="text-green-800">Email *</Label>
                   <Input
                     type="email"
                     placeholder="example@example.com"
-                    className="border-green-200"
+                    className="border-green-200 focus-visible:ring-1 focus-visible:ring-green-400 focus-visible:ring-offset-2"
                   />
                 </div>
               </div>
-              {/* <div className="space-y-2">
-                <Label className="text-green-800">Phone *</Label>
-                <Input
-                  type="tel"
-                  placeholder="+251-911-123456"
-                  className="border-green-200"
-                />
-              </div> */}
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label className="text-green-800">Enrolled Date *</Label>
-                  <Input type="date" className="border-green-200" />
+                  <Input
+                    type="date"
+                    className="border-green-200 focus-visible:ring-1 focus-visible:ring-green-400 focus-visible:ring-offset-2"
+                  />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-green-800">End Date</Label>
-                  <Input type="date" className="border-green-200" />
+                  <Label className="text-green-800">Volunteer Role*</Label>
+                  <Select value={grade} onValueChange={setGrade}>
+                    <SelectTrigger className="border-green-200 focus-visible:ring-1 focus-visible:ring-green-400 focus-visible:ring-offset-2">
+                      <SelectValue placeholder="Select role" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {fields.map((g) => (
+                        <SelectItem key={g} value={g}>
+                          {g}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
-              </div>
-              <div className="space-y-2">
-                <Label className="text-green-800">Enrolled Field *</Label>
-                <Select value={grade} onValueChange={setGrade}>
-                  <SelectTrigger className="border-green-200">
-                    <SelectValue placeholder="Select field" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {fields.map((g) => (
-                      <SelectItem key={g} value={g}>
-                        {g}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label className="text-green-800">Status *</Label>
-                <RadioGroup
-                  value={status}
-                  onValueChange={setStatus}
-                  className="flex gap-4"
-                >
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="Active" id="active" />
-                    <Label htmlFor="active">Active</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="Inactive" id="inactive" />
-                    <Label htmlFor="inactive">Inactive</Label>
-                  </div>
-                </RadioGroup>
               </div>
             </CardContent>
           </Card>
@@ -151,7 +123,7 @@ export default function StudentRegistrationForm() {
         <div>
           <Card className="border-green-100">
             <CardHeader>
-              <CardTitle className="text-green-800">Student Image</CardTitle>
+              <CardTitle className="text-green-800">Volunteer Image</CardTitle>
               <CardDescription className="text-green-600">
                 Upload a profile photo
               </CardDescription>
@@ -198,7 +170,7 @@ export default function StudentRegistrationForm() {
 
       {/* Submit Button */}
       <div className="flex justify-end mt-8 pt-6 border-t border-green-100">
-        <Btn text="Register Student" />
+        <Btn text="Register Volunteer" />
       </div>
     </div>
   );

@@ -31,6 +31,7 @@ const events = [
   { id: "1", name: "4H Day" },
   { id: "2", name: "Carrer Day" },
   { id: "3", name: "Trip" },
+  { id: "3", name: "Graduation" },
 ];
 
 export default function EventModal({
@@ -154,7 +155,7 @@ export default function EventModal({
               >
                 <SelectTrigger
                   id="term"
-                  className="border-0 border-b px-0 text-lg font-medium rounded-none border-green-400 focus-visible:ring-1 focus-visible:ring-green-400 focus-visible:ring-offset-2 w-full mt-1"
+                  className="border-0 border-b px-0 text-lg font-medium text-green-700 rounded-none border-green-400 shadow-none focus-visible:ring-0 focus-visible:outline-none focus:outline-none focus:ring-0 w-full mt-1"
                 >
                   <SelectValue placeholder="Add Event" />
                 </SelectTrigger>
@@ -163,7 +164,7 @@ export default function EventModal({
                     <SelectItem
                       key={event.id}
                       value={event.id}
-                      className="focus-visible:ring-green-400 focus-visible:ring-offset-2"
+                      className="focus-visible:ring-green-400 focus-visible:ring-offset-2 "
                     >
                       {event.name}
                     </SelectItem>
@@ -276,7 +277,7 @@ export default function EventModal({
           <div className="flex justify-between pt-4">
             <Button
               onClick={handleSave}
-              className="bg-green-600 hover:bg-green-700 text-white"
+              className="bg-green-600 hover:bg-green-700 text-white rounded-full px-5 py-1"
               disabled={currentTab === "event" && !title.trim()}
             >
               Save

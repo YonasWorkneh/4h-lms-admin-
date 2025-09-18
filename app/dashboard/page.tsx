@@ -7,12 +7,19 @@ import StudentList from "@/components/StudentList";
 import UpcomingClasses from "@/components/UpcomingClasses";
 import Loading from "../loading";
 import { useRouter } from "next/navigation";
+import { User, UserLock } from "lucide-react";
+
+const tabs = [
+  { id: 1, name: "Semester" },
+  { id: 2, name: "Year" },
+  { id: 3, name: "All-Time" },
+];
 
 export default function Dashboard() {
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const isAuthenticated = localStorage.getItem("isLogged");
-  console.log("isLOFFED", isAuthenticated);
+  const [active, setActive] = useState(1);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -37,30 +44,55 @@ export default function Dashboard() {
           </p>
         </div>
       </div>
-
+      <nav className="my-10">
+        <ul className="flex items-center gap-4">
+          {tabs.map((tab) => (
+            <li key={tab.id}>
+              <button
+                className={`px-3 py-2 hover:bg-gradient-to-r border hover:from-green-500 hover:to-emerald-600 hover:text-white rounded-full flex gap-1 items-center ${
+                  active === tab.id
+                    ? "text-white bg-gradient-to-r from-green-500 to-emerald-600"
+                    : "text-green-700 bg-white border-green-400"
+                }`}
+                onClick={() => setActive(tab.id)}
+              >
+                {/* {<tab.icon size={16} />} */}
+                <span>{tab.name}</span>
+              </button>
+            </li>
+          ))}
+        </ul>
+      </nav>
       {/* Metrics Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <MetricCard
           title="Total Courses"
-          value="12"
-          change="Increased from last semester"
+          value={active === 1 ? "500" : active === 2 ? "800" : "3500+"}
+          change={`${active !== 3 ? "Increased from last" : ""} ${
+            active === 1 ? "semester" : active === 3 ? "" : "year"
+          }`}
           trend="up"
           isHighlighted={true}
         />
         <MetricCard
-          title="Active Schools"
-          value="5"
-          subtitle="Needs Attention"
+          title="Schools"
+          value={active === 1 ? "5" : active === 2 ? "10" : "35+"}
         />
         <MetricCard
-          title="Active Students"
-          value="500"
-          change="Increased from last month"
+          title="Students"
+          value={active === 1 ? "500" : active === 2 ? "800" : "3500+"}
+          change={`${active !== 3 ? "Increased from last" : ""} ${
+            active === 1 ? "semester" : active === 3 ? "" : "year"
+          }`}
           trend="up"
         />
-        <MetricCard title="Volunteers" value="56" change="" trend="up" />
+        <MetricCard
+          title="Volunteers"
+          value={active === 1 ? "50" : active === 2 ? "120" : "300+"}
+          change=""
+          trend="up"
+        />
       </div>
-
       {/* Main Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
         {/* Left Column - 2/3 width */}

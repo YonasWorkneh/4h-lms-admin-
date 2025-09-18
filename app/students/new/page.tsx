@@ -40,9 +40,6 @@ export default function StudentRegistrationForm() {
   const thumbnail = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
-  const inputClasses =
-    "border-green-200 focus-visible:ring-1 focus-visible:ring-green-400 focus-visible:ring-offset-2";
-
   return (
     <div className="container mx-auto px-4 py-4">
       <Btn
@@ -71,39 +68,39 @@ export default function StudentRegistrationForm() {
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label className="text-green-800">Name *</Label>
-                  <Input placeholder="Full Name" className={inputClasses} />
+                  <Input placeholder="Full Name" className="border-green-200" />
                 </div>
                 <div className="space-y-2">
                   <Label className="text-green-800">Grade *</Label>
                   <Input
                     type="number"
                     placeholder="e.g 12"
-                    className={inputClasses}
+                    className="border-green-200"
                   />
                 </div>
               </div>
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label className="text-green-800">Phone *</Label>
-                  <Input placeholder="phone no." className={inputClasses} />
+                  <Input placeholder="phone no." className="border-green-200" />
                 </div>
                 <div className="space-y-2">
                   <Label className="text-green-800">Email *</Label>
                   <Input
                     type="email"
                     placeholder="example@example.com"
-                    className={inputClasses}
+                    className="border-green-200"
                   />
                 </div>
               </div>
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label className="text-green-800">Enrolled Date *</Label>
-                  <Input type="date" className={inputClasses} />
+                  <Input type="date" className="border-green-200" />
                 </div>
                 <div className="space-y-2">
                   <Label className="text-green-800">End Date</Label>
-                  <Input type="date" className={inputClasses} />
+                  <Input type="date" className="border-green-200" />
                 </div>
               </div>
             </CardContent>

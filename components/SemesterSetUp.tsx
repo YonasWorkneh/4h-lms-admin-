@@ -70,7 +70,7 @@ export default function SemesterSetUp() {
             <Select value={termInput} onValueChange={setTermInput}>
               <SelectTrigger
                 id="term"
-                className="border-green-400 focus-visible:ring-1 focus-visible:ring-green-400 focus-visible:ring-offset-2 w-1/2 mt-1"
+                className="border-green-400 shadow-none focus-visible:ring-0 focus-visible:outline-none focus:outline-none focus:ring-0 w-1/2 mt-1"
               >
                 <SelectValue placeholder="Select term" />
               </SelectTrigger>
@@ -98,7 +98,7 @@ export default function SemesterSetUp() {
           </div>
           <Button
             text="Add Semester"
-            styles="w-1/2"
+            styles="w-fit"
             onClick={handleAddSemester}
           />
         </CardContent>

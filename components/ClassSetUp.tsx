@@ -1,5 +1,5 @@
 "use client";
-import { BookOpen, School, Users, X } from "lucide-react";
+import { BookOpen, GraduationCap, School, Users, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import {
   Card,
@@ -19,6 +19,7 @@ import {
 } from "./ui/select";
 import Button from "./Button";
 import Calendar from "./Calendar";
+import { useSchoolStore } from "@/store/school";
 
 const schools = [
   { id: "1", name: "Dr. Haddis" },
@@ -26,14 +27,14 @@ const schools = [
   { id: "3", name: "Addis Raey" },
   { id: "4", name: "Misrak Dil" },
   { id: "5", name: "Bole Highschool" },
-]; //static will be changed
+];
 
 const labAssistants = [
   { id: "1", name: "Abel Mekonnen" },
   { id: "2", name: "Saron Tadesse" },
   { id: "3", name: "Yonatan Fikru" },
   { id: "4", name: "Marta Kebede" },
-]; //sample labassistants
+];
 
 const courses = [
   {
@@ -96,7 +97,7 @@ const courses = [
     start: "2025-09-07",
     end: "2025-10-25",
   },
-]; // sample data
+];
 
 const instructors = [
   {
@@ -108,6 +109,7 @@ const instructors = [
     phone: "+251-92-000-0006",
     status: "Active",
     enrolledDate: "July 3, 2018",
+    fieldOfStudy: "Software Engineering",
   },
   {
     id: "7",
@@ -118,6 +120,7 @@ const instructors = [
     phone: "+251-92-000-0007",
     status: "Active",
     enrolledDate: "July 3, 2018",
+    fieldOfStudy: "Business and Information System",
   },
   {
     id: "8",
@@ -128,6 +131,7 @@ const instructors = [
     phone: "+251-92-000-0008",
     status: "Active",
     enrolledDate: "July 3, 2018",
+    fieldOfStudy: "Architectural Engineering",
   },
   {
     id: "9",
@@ -138,6 +142,7 @@ const instructors = [
     phone: "+251-92-000-0009",
     status: "Active",
     enrolledDate: "July 3, 2018",
+    fieldOfStudy: "Doctor of Medicine",
   },
   {
     id: "10",
@@ -148,6 +153,7 @@ const instructors = [
     phone: "+251-92-000-0010",
     status: "Active",
     enrolledDate: "July 3, 2018",
+    fieldOfStudy: "Software Engineering",
   },
   {
     id: "11",
@@ -158,6 +164,7 @@ const instructors = [
     phone: "+251-92-000-0011",
     status: "Active",
     enrolledDate: "July 3, 2018",
+    fieldOfStudy: "Logistics",
   },
   {
     id: "12",
@@ -168,6 +175,7 @@ const instructors = [
     phone: "+251-92-000-0012",
     status: "Active",
     enrolledDate: "July 3, 2018",
+    fieldOfStudy: "Business and Managment",
   },
   {
     id: "13",
@@ -178,6 +186,7 @@ const instructors = [
     phone: "+251-92-000-0013",
     status: "Active",
     enrolledDate: "July 3, 2018",
+    fieldOfStudy: "Architectural Engineering",
   },
   {
     id: "14",
@@ -188,6 +197,7 @@ const instructors = [
     phone: "+251-92-000-0014",
     status: "Active",
     enrolledDate: "July 3, 2018",
+    fieldOfStudy: "Public relations",
   },
   {
     id: "15",
@@ -198,6 +208,7 @@ const instructors = [
     phone: "+251-92-000-0015",
     status: "Active",
     enrolledDate: "July 3, 2018",
+    fieldOfStudy: "Electrical Engineering",
   },
   {
     id: "16",
@@ -208,6 +219,7 @@ const instructors = [
     phone: "+251-92-000-0016",
     status: "Active",
     enrolledDate: "July 3, 2018",
+    fieldOfStudy: "Logistics",
   },
   {
     id: "17",
@@ -218,6 +230,7 @@ const instructors = [
     phone: "+251-92-000-0017",
     status: "Active",
     enrolledDate: "July 3, 2018",
+    fieldOfStudy: "Software Engineering",
   },
   {
     id: "18",
@@ -228,6 +241,7 @@ const instructors = [
     phone: "+251-92-000-0018",
     status: "Active",
     enrolledDate: "July 3, 2018",
+    fieldOfStudy: "Economics",
   },
   {
     id: "19",
@@ -238,6 +252,7 @@ const instructors = [
     phone: "+251-92-000-0019",
     status: "Active",
     enrolledDate: "July 3, 2018",
+    fieldOfStudy: "Doctor of Medicine",
   },
   {
     id: "20",
@@ -248,6 +263,7 @@ const instructors = [
     phone: "+251-92-000-0020",
     status: "Active",
     enrolledDate: "July 3, 2018",
+    fieldOfStudy: "Economics",
   },
   {
     id: "21",
@@ -258,6 +274,7 @@ const instructors = [
     phone: "+251-92-000-0021",
     status: "Active",
     enrolledDate: "July 3, 2018",
+    fieldOfStudy: "Marketing",
   },
   {
     id: "22",
@@ -268,6 +285,7 @@ const instructors = [
     phone: "+251-92-000-0022",
     status: "Active",
     enrolledDate: "July 3, 2018",
+    fieldOfStudy: "Civil Engineering",
   },
   {
     id: "23",
@@ -278,6 +296,7 @@ const instructors = [
     phone: "+251-92-000-0023",
     status: "Active",
     enrolledDate: "July 3, 2018",
+    fieldOfStudy: "Software Engineering",
   },
   {
     id: "24",
@@ -288,19 +307,30 @@ const instructors = [
     phone: "+251-92-000-0024",
     status: "Active",
     enrolledDate: "July 3, 2018",
+    fieldOfStudy: "Software Engineering",
   },
 ];
 
+interface CourseInstructors {
+  mainInstructors: string[];
+  assistants: string[];
+}
+
 export default function ClassSetUp() {
-  const [active, setActive] = useState(schools[0].id);
+  const { selectedSchools } = useSchoolStore();
+  const [active, setActive] = useState(selectedSchools[0]);
   const [calendar, setCalendar] = useState<string>("1");
   const [calendarOpened, setCalendarOpened] = useState<boolean>(false);
   const [selectedLabAssistants, setSelectedLabAssistants] = useState<string[]>(
     []
   );
   const [selectedCourses, setSelectedCourses] = useState<string[]>([]);
-  const [selectedMain, setSelectedMain] = useState<string[]>([]);
-  const [selectedAssistants, setSelectedAssistants] = useState<string[]>([]);
+  const [courseInstructors, setCourseInstructors] = useState<{
+    [courseId: string]: CourseInstructors;
+  }>({});
+  const selectedSchoolsObj = schools.filter((school, index) =>
+    selectedSchools.includes(school.id)
+  );
 
   const toggleLabAssistants = (id: string) =>
     setSelectedLabAssistants((prev) =>
@@ -309,32 +339,78 @@ export default function ClassSetUp() {
   const removeLabAssistant = (id: string) =>
     setSelectedLabAssistants((prev) => prev.filter((s) => s !== id));
 
-  const toggleCourses = (id: string) =>
-    setSelectedCourses((prev) =>
-      prev.includes(id) ? prev.filter((s) => s !== id) : [...prev, id]
-    );
-  const removeCourse = (id: string) =>
-    setSelectedCourses((prev) => prev.filter((s) => s !== id));
+  const toggleCourses = (id: string) => {
+    setSelectedCourses((prev) => {
+      if (prev.includes(id)) {
+        const newCourses = prev.filter((s) => s !== id);
+        setCourseInstructors((prevInstructors) => {
+          const newInstructors = { ...prevInstructors };
+          delete newInstructors[id];
+          return newInstructors;
+        });
+        return newCourses;
+      } else {
+        setCourseInstructors((prev) => ({
+          ...prev,
+          [id]: { mainInstructors: [], assistants: [] },
+        }));
+        return [...prev, id];
+      }
+    });
+  };
 
-  const toggleMainInstructors = (id: string) =>
-    setSelectedMain((prev) =>
-      prev.includes(id) ? prev.filter((s) => s !== id) : [...prev, id]
-    );
-  const removeMainInstructor = (id: string) =>
-    setSelectedMain((prev) => prev.filter((s) => s !== id));
+  const toggleMainInstructors = (courseId: string, instructorId: string) => {
+    setCourseInstructors((prev) => ({
+      ...prev,
+      [courseId]: {
+        ...prev[courseId],
+        mainInstructors: prev[courseId].mainInstructors.includes(instructorId)
+          ? prev[courseId].mainInstructors.filter((id) => id !== instructorId)
+          : [...prev[courseId].mainInstructors, instructorId],
+      },
+    }));
+  };
 
-  const toggleAssistants = (id: string) =>
-    setSelectedAssistants((prev) =>
-      prev.includes(id) ? prev.filter((s) => s !== id) : [...prev, id]
-    );
-  const removeAssistant = (id: string) =>
-    setSelectedAssistants((prev) => prev.filter((s) => s !== id));
+  const removeMainInstructor = (courseId: string, instructorId: string) => {
+    setCourseInstructors((prev) => ({
+      ...prev,
+      [courseId]: {
+        ...prev[courseId],
+        mainInstructors: prev[courseId].mainInstructors.filter(
+          (id) => id !== instructorId
+        ),
+      },
+    }));
+  };
+
+  const toggleAssistants = (courseId: string, instructorId: string) => {
+    setCourseInstructors((prev) => ({
+      ...prev,
+      [courseId]: {
+        ...prev[courseId],
+        assistants: prev[courseId].assistants.includes(instructorId)
+          ? prev[courseId].assistants.filter((id) => id !== instructorId)
+          : [...prev[courseId].assistants, instructorId],
+      },
+    }));
+  };
+
+  const removeAssistant = (courseId: string, instructorId: string) => {
+    setCourseInstructors((prev) => ({
+      ...prev,
+      [courseId]: {
+        ...prev[courseId],
+        assistants: prev[courseId].assistants.filter(
+          (id) => id !== instructorId
+        ),
+      },
+    }));
+  };
 
   useEffect(() => {
-    setSelectedAssistants([]);
-    setSelectedCourses([]);
     setSelectedLabAssistants([]);
-    setSelectedMain([]);
+    setSelectedCourses([]);
+    setCourseInstructors({});
     setCalendarOpened(false);
   }, [active]);
 
@@ -342,7 +418,7 @@ export default function ClassSetUp() {
     <div>
       <nav>
         <ul className="flex items-center gap-4">
-          {schools.map((school) => (
+          {selectedSchoolsObj.map((school) => (
             <li key={school.id}>
               <button
                 className={`px-3 py-2 hover:bg-gradient-to-r border hover:from-green-500 hover:to-emerald-600 hover:text-white rounded-full flex gap-1 items-center ${
@@ -379,22 +455,22 @@ export default function ClassSetUp() {
                 <Select value={calendar} onValueChange={setCalendar}>
                   <SelectTrigger
                     id="term"
-                    className="border-green-400 focus-visible:ring-1 focus-visible:ring-green-400 focus-visible:ring-offset-2 w-1/2 mt-1"
+                    className="border-green-400 shadow-none focus-visible:ring-0 focus-visible:outline-none focus:outline-none focus:ring-0 w-1/2 mt-1"
                   >
                     <SelectValue placeholder="Select calendar" />
                   </SelectTrigger>
                   <SelectContent className="focus-visible:ring-green-400 focus-visible:ring-offset-2">
                     <SelectItem
                       value={"1"}
-                      className="focus-visible:ring-green-400 focus-visible:ring-offset-2"
+                      className="shadow-none focus-visible:ring-0 focus-visible:outline-none focus:outline-none focus:ring-0"
                     >
-                      Y2025T1M
+                      Y2025T1MC
                     </SelectItem>
                     <SelectItem
-                      className="focus-visible:ring-green-400 focus-visible:ring-offset-2"
+                      className="shadow-none focus-visible:ring-0 focus-visible:outline-none focus:outline-none focus:ring-0"
                       value="2"
                     >
-                      Y2025T1S
+                      Y2025T1SC
                     </SelectItem>
                   </SelectContent>
                 </Select>
@@ -411,7 +487,6 @@ export default function ClassSetUp() {
                   >
                     <X className="text-sm text-gray-500" />
                   </button>
-
                   <Calendar />
                 </div>
               )}
@@ -419,68 +494,16 @@ export default function ClassSetUp() {
           </div>
           <div className="space-y-1">
             <Label htmlFor="schools" className="text-green-800">
-              Select Courses *
-            </Label>
-            <div>
-              {/* Select */}
-              <Select value="" onValueChange={toggleCourses}>
-                <SelectTrigger
-                  id="schools"
-                  className="border-green-400 focus-visible:ring-1 focus-visible:ring-green-400 focus-visible:ring-offset-2 w-1/2"
-                >
-                  <SelectValue placeholder="Select courses" />
-                </SelectTrigger>
-
-                <SelectContent className="focus-visible:ring-green-400 focus-visible:ring-offset-2">
-                  {courses.map((course) => (
-                    <SelectItem
-                      key={course.id}
-                      value={course.id}
-                      className="focus-visible:ring-green-400 focus-visible:ring-offset-2 flex justify-between items-center"
-                    >
-                      <span>{course.title}</span>
-
-                      {selectedCourses?.includes(course.id) && (
-                        <span> &#10003;</span>
-                      )}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {/* Chips */}
-              <div className="flex flex-wrap gap-2 mt-5">
-                {selectedCourses.map((id) => {
-                  const course = courses.find((s) => s.id === id);
-                  if (!course) return null;
-                  return (
-                    <div
-                      key={id}
-                      className="flex items-center gap-1 bg-green-100 text-green-800 px-2 py-1 rounded-full"
-                    >
-                      <span>{course.title}</span>
-                      <button onClick={() => removeCourse(id)}>
-                        <X size={14} />
-                      </button>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-          <div className="space-y-1">
-            <Label htmlFor="schools" className="text-green-800">
               Select Lab-Assistants *
             </Label>
             <div>
-              {/* Select */}
               <Select value={""} onValueChange={toggleLabAssistants}>
                 <SelectTrigger
                   id="schools"
-                  className="border-green-400 focus-visible:ring-1 focus-visible:ring-green-400 focus-visible:ring-offset-2 w-1/2"
+                  className="border-green-400 shadow-none focus-visible:ring-0 focus-visible:outline-none focus:outline-none focus:ring-0 w-1/2"
                 >
                   <SelectValue placeholder="Select lab-assistants" />
                 </SelectTrigger>
-
                 <SelectContent className="focus-visible:ring-green-400 focus-visible:ring-offset-2">
                   {labAssistants.map((assis) => (
                     <SelectItem
@@ -489,7 +512,6 @@ export default function ClassSetUp() {
                       className="focus-visible:ring-green-400 focus-visible:ring-offset-2 flex justify-between items-center"
                     >
                       <span>{assis.name}</span>
-
                       {selectedLabAssistants?.includes(assis.id) && (
                         <span> &#10003;</span>
                       )}
@@ -497,7 +519,6 @@ export default function ClassSetUp() {
                   ))}
                 </SelectContent>
               </Select>
-              {/* Chips */}
               <div className="flex flex-wrap gap-2 mt-5">
                 {selectedLabAssistants.map((id) => {
                   const assistant = labAssistants.find((s) => s.id === id);
@@ -517,113 +538,204 @@ export default function ClassSetUp() {
               </div>
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-5">
-            <p className="col-span-2 text-green-800">Instructors *</p>
-            <div className="space-y-1">
-              <Label htmlFor="main-instructors" className="text-green-800">
-                Select Main-Instructors *
-              </Label>
-              <div>
-                {/* Select */}
-                <Select value={""} onValueChange={toggleMainInstructors}>
-                  <SelectTrigger
-                    id="main-instructors"
-                    className="border-green-400 focus-visible:ring-1 focus-visible:ring-green-400 focus-visible:ring-offset-2 w-full"
-                  >
-                    <SelectValue placeholder="Select main-instructors" />
-                  </SelectTrigger>
-
-                  <SelectContent className="focus-visible:ring-green-400 focus-visible:ring-offset-2">
-                    {instructors.map((instructor) => (
-                      <SelectItem
-                        key={instructor.id}
-                        value={instructor.id}
-                        className="focus-visible:ring-green-400 focus-visible:ring-offset-2 flex justify-between items-center"
-                      >
-                        <span>{instructor.name}</span>
-
-                        {selectedMain?.includes(instructor.id) && (
-                          <span> &#10003;</span>
-                        )}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                {/* Chips */}
-                <div className="flex flex-wrap gap-2 mt-5">
-                  {selectedMain.map((id) => {
-                    const instructor = instructors.find((s) => s.id === id);
-                    if (!instructor) return null;
-                    return (
-                      <div
-                        key={id}
-                        className="flex items-center gap-1 bg-green-100 text-green-800 px-2 py-1 rounded-full"
-                      >
-                        <span>{instructor.name}</span>
-                        <button onClick={() => removeMainInstructor(id)}>
-                          <X size={14} />
-                        </button>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-            <div className="space-y-1">
-              <Label htmlFor="assistants" className="text-green-800">
-                Select Assistants *
-              </Label>
-              <div>
-                {/* Select */}
-                <Select value={""} onValueChange={toggleAssistants}>
-                  <SelectTrigger
-                    id="assistants"
-                    className="border-green-400 focus-visible:ring-1 focus-visible:ring-green-400 focus-visible:ring-offset-2 w-full"
-                  >
-                    <SelectValue placeholder="Select assistants" />
-                  </SelectTrigger>
-
-                  <SelectContent className="focus-visible:ring-green-400 focus-visible:ring-offset-2">
-                    {instructors.map((instructor) => (
-                      <SelectItem
-                        key={instructor.id}
-                        value={instructor.id}
-                        className="focus-visible:ring-green-400 focus-visible:ring-offset-2 flex justify-between items-center"
-                      >
-                        <span>{instructor.name}</span>
-
-                        {selectedAssistants?.includes(instructor.id) && (
-                          <span> &#10003;</span>
-                        )}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                {/* Chips */}
-                <div className="flex flex-wrap gap-2 mt-5">
-                  {selectedAssistants.map((id) => {
-                    const instructor = instructors.find((s) => s.id === id);
-                    if (!instructor) return null;
-                    return (
-                      <div
-                        key={id}
-                        className="flex items-center gap-1 bg-green-100 text-green-800 px-2 py-1 rounded-full"
-                      >
-                        <span>{instructor.name}</span>
-                        <button onClick={() => removeAssistant(id)}>
-                          <X size={14} />
-                        </button>
-                      </div>
-                    );
-                  })}
-                </div>
+          <div className="space-y-1">
+            <Label htmlFor="schools" className="text-green-800">
+              Select Courses *
+            </Label>
+            <div>
+              <Select value="" onValueChange={toggleCourses}>
+                <SelectTrigger
+                  id="schools"
+                  className="border-green-400 shadow-none focus-visible:ring-0 focus-visible:outline-none focus:outline-none focus:ring-0 w-1/2"
+                >
+                  <SelectValue placeholder="Select courses" />
+                </SelectTrigger>
+                <SelectContent className="focus-visible:ring-green-400 focus-visible:ring-offset-2">
+                  {courses.map((course) => (
+                    <SelectItem
+                      key={course.id}
+                      value={course.id}
+                      className="focus-visible:ring-green-400 focus-visible:ring-offset-2 flex justify-between items-center"
+                    >
+                      <span>{course.title}</span>
+                      {selectedCourses?.includes(course.id) && (
+                        <span> &#10003;</span>
+                      )}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <div className="flex flex-wrap gap-2 mt-5">
+                {selectedCourses.map((id) => {
+                  const course = courses.find((s) => s.id === id);
+                  if (!course) return null;
+                  return (
+                    <div
+                      key={id}
+                      className="flex items-center gap-1 bg-green-100 text-green-800 px-2 py-1 rounded-full"
+                    >
+                      <span>{course.title}</span>
+                      <button onClick={() => toggleCourses(id)}>
+                        <X size={14} />
+                      </button>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>
-          <Button
-            text="Create Class"
-            // onClick={} //create class api
-          />
+
+          {selectedCourses.map((courseId) => {
+            const course = courses.find((c) => c.id === courseId);
+            if (!course) return null;
+            return (
+              <div key={courseId} className="space-y-4 border-t pt-4">
+                <h3 className="text-lg font-semibold text-green-800">
+                  Instructors for {course.title} *
+                </h3>
+                <div className="grid grid-cols-2 gap-x-5">
+                  <div className="space-y-1">
+                    <Label
+                      htmlFor={`main-instructors-${courseId}`}
+                      className="text-green-800"
+                    >
+                      Select Main-Instructors *
+                    </Label>
+                    <Select
+                      value=""
+                      onValueChange={(id) =>
+                        toggleMainInstructors(courseId, id)
+                      }
+                    >
+                      <SelectTrigger
+                        id={`main-instructors-${courseId}`}
+                        className="border-green-400 shadow-none focus-visible:ring-0 focus-visible:outline-none focus:outline-none focus:ring-0 w-full"
+                      >
+                        <SelectValue placeholder="Select main-instructors" />
+                      </SelectTrigger>
+                      <SelectContent className="focus-visible:ring-green-400 focus-visible:ring-offset-2">
+                        {instructors.map((instructor) => (
+                          <SelectItem
+                            key={instructor.id}
+                            value={instructor.id}
+                            className="focus-visible:ring-green-400 focus-visible:ring-offset-2"
+                          >
+                            <div className="flex items-center justify-between w-full gap-5">
+                              <div>
+                                <span>{instructor.name}</span>
+                                <span className="text-xs text-gray-400 flex items-center gap-1">
+                                  <GraduationCap
+                                    className="text-green-500"
+                                    size={15}
+                                  />
+                                  {instructor.fieldOfStudy}
+                                </span>
+                              </div>
+                              {courseInstructors[
+                                courseId
+                              ]?.mainInstructors.includes(instructor.id) && (
+                                <span> &#10003;</span>
+                              )}
+                            </div>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <div className="flex flex-wrap gap-2 mt-5">
+                      {courseInstructors[courseId]?.mainInstructors.map(
+                        (id) => {
+                          const instructor = instructors.find(
+                            (s) => s.id === id
+                          );
+                          if (!instructor) return null;
+                          return (
+                            <div
+                              key={id}
+                              className="flex items-center gap-1 bg-green-100 text-green-800 px-2 py-1 rounded-full"
+                            >
+                              <span>{instructor.name}</span>
+                              <button
+                                onClick={() =>
+                                  removeMainInstructor(courseId, id)
+                                }
+                              >
+                                <X size={14} />
+                              </button>
+                            </div>
+                          );
+                        }
+                      )}
+                    </div>
+                  </div>
+                  <div className="space-y-1">
+                    <Label
+                      htmlFor={`assistants-${courseId}`}
+                      className="text-green-800"
+                    >
+                      Select Assistants *
+                    </Label>
+                    <Select
+                      value=""
+                      onValueChange={(id) => toggleAssistants(courseId, id)}
+                    >
+                      <SelectTrigger
+                        id={`assistants-${courseId}`}
+                        className="border-green-400 shadow-none focus-visible:ring-0 focus-visible:outline-none focus:outline-none focus:ring-0 w-full"
+                      >
+                        <SelectValue placeholder="Select assistants" />
+                      </SelectTrigger>
+                      <SelectContent className="focus-visible:ring-green-400 focus-visible:ring-offset-2">
+                        {instructors.map((instructor) => (
+                          <SelectItem
+                            key={instructor.id}
+                            value={instructor.id}
+                            className="focus-visible:ring-green-400 focus-visible:ring-offset-2 flex justify-between items-center"
+                          >
+                            <div className="flex items-center justify-between w-full gap-5">
+                              <div>
+                                <span>{instructor.name}</span>
+                                <span className="text-xs text-gray-400 flex items-center gap-1">
+                                  <GraduationCap
+                                    className="text-green-500"
+                                    size={15}
+                                  />
+                                  {instructor.fieldOfStudy}
+                                </span>
+                              </div>
+                              {courseInstructors[courseId]?.assistants.includes(
+                                instructor.id
+                              ) && <span> &#10003;</span>}
+                            </div>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <div className="flex flex-wrap gap-2 mt-5">
+                      {courseInstructors[courseId]?.assistants.map((id) => {
+                        const instructor = instructors.find((s) => s.id === id);
+                        if (!instructor) return null;
+                        return (
+                          <div
+                            key={id}
+                            className="flex items-center gap-1 bg-green-100 text-green-800 px-2 py-1 rounded-full"
+                          >
+                            <span>{instructor.name}</span>
+                            <button
+                              onClick={() => removeAssistant(courseId, id)}
+                            >
+                              <X size={14} />
+                            </button>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+
+          <Button text="Create Class" />
         </CardContent>
       </Card>
     </div>
