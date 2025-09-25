@@ -1,16 +1,13 @@
-"use server";
+import { setCredential } from "../credential";
 
-import { cookies } from "next/headers";
-
-const baseUrl = process.env.BASE_API_URL;
-console.log(baseUrl);
+const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export const login = async (credential: {
   email: string;
   password: string;
 }) => {
-  console.log("cred", credential);
   try {
+    console.log(baseUrl);
     const response = await fetch(`${baseUrl}/auth/login`, {
       method: "POST",
       headers: {
@@ -20,7 +17,7 @@ export const login = async (credential: {
     });
     const data = await response.json();
     if (data.error || data.message) throw new Error("Something went wrong");
-    cookies().set("access_token", data.token);
+    setCredential({ access: data.token });
     return data;
   } catch (err) {
     console.error(err.message);

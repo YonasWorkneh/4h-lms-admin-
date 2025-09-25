@@ -28,7 +28,6 @@ export default function ClientRedirect({
 
   useEffect(() => {
     if (isAuthenticated || isLogged) {
-      console.log("is it getting here");
       setMounted(true);
       router.push(redirect);
     } else {

@@ -71,7 +71,22 @@ export default function NewCoursePage() {
   const [selectedAssistants, setSelectedAssistants] = useState<string[]>([]);
   const [currentAssistant, setCurrentAssistant] = useState("");
   const thumbnail = useRef<HTMLInputElement>(null);
-  const [image, setImage] = useState<any | null>(null);
+  const [image, setImage] = useState<any | null>(null); // Add at the top of your component
+  const [personnels, setPersonnels] = useState<
+    { name: string; role: string }[]
+  >([]);
+  const [newPersonnel, setNewPersonnel] = useState({ name: "", role: "" });
+
+  const addPersonnel = () => {
+    if (newPersonnel.name && newPersonnel.role) {
+      setPersonnels([...personnels, newPersonnel]);
+      setNewPersonnel({ name: "", role: "" });
+    }
+  };
+
+  const removePersonnel = (index: number) => {
+    setPersonnels(personnels.filter((_, i) => i !== index));
+  };
 
   const addAssistant = () => {
     if (
@@ -128,7 +143,7 @@ export default function NewCoursePage() {
                     <Input
                       id="title"
                       placeholder="e.g., Bole Community School"
-                      className="border-green-200 focus-visible:ring-1 focus-visible:ring-green-400 focus-visible:ring-offset-2"
+                      className="border-green-400 focus-visible:ring-1 focus-visible:ring-green-400 focus-visible:ring-offset-2"
                     />
                   </div>
                 </div>
@@ -140,9 +155,9 @@ export default function NewCoursePage() {
                     <Input
                       id="title"
                       placeholder="e.g., ST Bole 12B"
-                      className="border-green-200 focus-visible:ring-1 focus-visible:ring-green-400 focus-visible:ring-offset-2"
+                      className="border-green-400 focus-visible:ring-1 focus-visible:ring-green-400 focus-visible:ring-offset-2"
                     />
-                  </div>{" "}
+                  </div>
                 </div>
                 <div>
                   <div className="space-y-2">
@@ -151,9 +166,79 @@ export default function NewCoursePage() {
                     </Label>
                     <Input
                       id="contact"
-                      placeholder="e.g., +251 986261979"
-                      className="border-green-200 focus-visible:ring-1 focus-visible:ring-green-400 focus-visible:ring-offset-2"
+                      placeholder="e.g., +251 186261979"
+                      className="border-green-400 focus-visible:ring-1 focus-visible:ring-green-400 focus-visible:ring-offset-2"
                     />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <p className="text-sm font-medium leading-none text-green-800">
+                    School Personnels
+                  </p>
+
+                  {/* Existing personnels list */}
+                  {personnels.length > 0 && (
+                    <div className="space-y-2">
+                      {personnels.map((p, idx) => (
+                        <div
+                          key={idx}
+                          className="flex items-center space-x-2 bg-green-50 border border-green-200 rounded-md px-3 py-2"
+                        >
+                          <span className="text-green-700">{p.name}</span>
+                          <Badge variant="outline" className="text-green-600">
+                            {p.role}
+                          </Badge>
+                          <button
+                            type="button"
+                            onClick={() => removePersonnel(idx)}
+                            className="ml-auto p-1 rounded-full bg-white border border-green-300 hover:bg-green-100"
+                          >
+                            <X className="w-4 h-4 text-green-600" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Add new personnel */}
+                  <div className="flex items-center space-x-2 mt-2">
+                    <Input
+                      placeholder="Name"
+                      value={newPersonnel.name}
+                      onChange={(e) =>
+                        setNewPersonnel((prev) => ({
+                          ...prev,
+                          name: e.target.value,
+                        }))
+                      }
+                      className="border-green-400 focus-visible:ring-1 focus-visible:ring-green-400 focus-visible:ring-offset-2"
+                    />
+                    <Select
+                      value={newPersonnel.role}
+                      onValueChange={(val) =>
+                        setNewPersonnel((prev) => ({ ...prev, role: val }))
+                      }
+                    >
+                      <SelectTrigger className="border-green-400 shadow-none focus-visible:ring-0 focus-visible:outline-none focus:outline-none focus:ring-0 w-1/2 mt-1">
+                        <SelectValue placeholder="Select Role" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Director">Director</SelectItem>
+                        <SelectItem value="Assistant Director">
+                          Assistant Director
+                        </SelectItem>
+                        <SelectItem value="Lab Assistant">
+                          Lab Assistant
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <button
+                      type="button"
+                      onClick={addPersonnel}
+                      className="p-2 rounded-full bg-green-100 text-green-700 hover:bg-green-200"
+                    >
+                      <Plus className="w-5 h-5" />
+                    </button>
                   </div>
                 </div>
               </CardContent>

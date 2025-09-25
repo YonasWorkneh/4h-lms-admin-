@@ -7,7 +7,7 @@ interface NoCoursesProps {
   onClearSearch?: () => void;
   title?: string;
   actionLabel?: string;
-  action: () => void;
+  action?: () => void;
 }
 
 const NoCourses = ({

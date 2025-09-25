@@ -85,7 +85,7 @@ export default function StudentRegistrationForm() {
                   <Input placeholder="phone no." className="border-green-200" />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-green-800">Email *</Label>
+                  <Label className="text-green-800">Email </Label>
                   <Input
                     type="email"
                     placeholder="example@example.com"
@@ -95,12 +95,12 @@ export default function StudentRegistrationForm() {
               </div>
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label className="text-green-800">Enrolled Date *</Label>
-                  <Input type="date" className="border-green-200" />
+                  <Label className="text-green-800">Gaurdian *</Label>
+                  <Input className="border-green-200" placeholder="Name" />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-green-800">End Date</Label>
-                  <Input type="date" className="border-green-200" />
+                  <Label className="text-green-800">Guradian contact *</Label>
+                  <Input className="border-green-200" placeholder="phone no." />
                 </div>
               </div>
             </CardContent>

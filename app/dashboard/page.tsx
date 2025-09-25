@@ -7,7 +7,22 @@ import StudentList from "@/components/StudentList";
 import UpcomingClasses from "@/components/UpcomingClasses";
 import Loading from "../loading";
 import { useRouter } from "next/navigation";
-import { User, UserLock } from "lucide-react";
+
+// 👇 New example placeholder components
+// import YearlyOverview from "@/components/YearlyOverview";
+// import TopStudents from "@/components/TopStudents";
+
+// import AllTimeImpact from "@/components/AllTimeImpact";
+// import VolunteerGrowth from "@/components/VolunteerGrowth";
+// import AlumniStories from "@/components/AlumniStories";
+import {
+  AlumniStories,
+  TeacherEngagement,
+  AllTimeImpact,
+  YearlyOverview,
+  TopStudents,
+} from "./Filter";
+import PhotoDisplay from "./Photo";
 
 const tabs = [
   { id: 1, name: "Semester" },
@@ -23,7 +38,6 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      console.log("getting in dsa");
       setMounted(true);
     } else {
       router.push("/login");
@@ -31,6 +45,7 @@ export default function Dashboard() {
   }, [isAuthenticated]);
 
   if (!mounted) return <Loading />;
+
   return (
     <div>
       {/* Dashboard Header */}
@@ -44,6 +59,8 @@ export default function Dashboard() {
           </p>
         </div>
       </div>
+
+      {/* Tabs */}
       <nav className="my-10">
         <ul className="flex items-center gap-4">
           {tabs.map((tab) => (
@@ -56,18 +73,18 @@ export default function Dashboard() {
                 }`}
                 onClick={() => setActive(tab.id)}
               >
-                {/* {<tab.icon size={16} />} */}
                 <span>{tab.name}</span>
               </button>
             </li>
           ))}
         </ul>
       </nav>
+
       {/* Metrics Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <MetricCard
           title="Total Courses"
-          value={active === 1 ? "500" : active === 2 ? "800" : "3500+"}
+          value={active === 1 ? "10" : active === 2 ? "15" : "50+"}
           change={`${active !== 3 ? "Increased from last" : ""} ${
             active === 1 ? "semester" : active === 3 ? "" : "year"
           }`}
@@ -93,18 +110,47 @@ export default function Dashboard() {
           trend="up"
         />
       </div>
+
       {/* Main Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
-        {/* Left Column - 2/3 width */}
-        <div className="lg:col-span-2 space-y-8">
-          <UpcomingClasses />
-          <CourseProgress />
-        </div>
+        {active === 1 && (
+          <>
+            {/* Semester View */}
+            <div className="lg:col-span-2 space-y-8">
+              <UpcomingClasses />
+              <CourseProgress />
+            </div>
+            <div className="space-y-8">
+              <StudentList />
+            </div>
+          </>
+        )}
 
-        {/* Right Column - 1/3 width */}
-        <div className="space-y-8">
-          <StudentList />
-        </div>
+        {active === 2 && (
+          <>
+            {/* Year View */}
+            <div className="lg:col-span-2 space-y-8">
+              <YearlyOverview />
+              <TeacherEngagement />
+            </div>
+            <div className="space-y-8">
+              <TopStudents />
+            </div>
+          </>
+        )}
+
+        {active === 3 && (
+          <>
+            {/* All-Time View */}
+            <div className="lg:col-span-2 space-y-8">
+              <AllTimeImpact />
+              <PhotoDisplay />
+            </div>
+            <div className="space-y-8">
+              <AlumniStories />
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

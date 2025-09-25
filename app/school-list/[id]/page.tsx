@@ -8,7 +8,7 @@ import Link from "next/link";
 // import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import React, { useState } from "react";
-import StudentList from "./StudentList";
+import StudentList from "@/components/List";
 import SearchBar from "@/components/SearchBar";
 
 export default function Page() {

@@ -23,7 +23,16 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { BookOpen, Users, Clock, Upload, Plus, X, Pencil } from "lucide-react";
+import {
+  BookOpen,
+  Users,
+  Clock,
+  Upload,
+  Plus,
+  X,
+  Pencil,
+  Link,
+} from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
@@ -90,6 +99,12 @@ export default function NewCoursePage() {
     );
   };
   const router = useRouter();
+  const materialInput = useRef<HTMLInputElement>(null);
+  const [materials, setMaterials] = useState<File[]>([]);
+
+  const removeMaterial = (index: number) => {
+    setMaterials((prev) => prev.filter((_, i) => i !== index));
+  };
 
   return (
     <div>
@@ -128,31 +143,9 @@ export default function NewCoursePage() {
                     <Input
                       id="title"
                       placeholder="e.g., Complete Web Development Bootcamp"
-                      className="border-green-200 focus-visible:ring-1 focus-visible:ring-green-400 focus-visible:ring-offset-2"
+                      className="border-green-400 focus-visible:ring-1 focus-visible:ring-green-400 focus-visible:ring-offset-2"
                     />
                   </div>
-                  {/* <div className="space-y-2">
-                    <Label htmlFor="school" className="text-green-800">
-                      School *
-                    </Label>
-                    <Select
-                      value={selectedSchool}
-                      onValueChange={setSelectedSchool}
-                    >
-                      <SelectTrigger className="border-green-200 focus:border-green-400 focus:ring-green-400">
-                        <SelectValue placeholder="Select a school" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {schools.map((school) => (
-                          <SelectItem key={school.id} value={school.id}>
-                            <div className="flex items-center justify-between w-full">
-                              <span>{school.name}</span>
-                            </div>
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div> */}
                 </div>
 
                 <div className="space-y-2">
@@ -162,7 +155,80 @@ export default function NewCoursePage() {
                   <Textarea
                     id="description"
                     placeholder="Provide a comprehensive description of what students will learn..."
-                    className="border-green-200 focus-visible:ring-1 focus-visible:ring-green-400 focus-visible:ring-offset-2 min-h-[120px]"
+                    className="border-green-400 focus-visible:ring-1 focus-visible:ring-green-400 focus-visible:ring-offset-2 min-h-[120px]"
+                  />
+                </div>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="plan" className="text-green-800">
+                      Course Lesson Plan (use google spreadsheet link)*
+                    </Label>
+                    <div className="relative">
+                      <Input
+                        id="plan"
+                        placeholder="e.g., https://docs.google.com/spreadsheets "
+                        className="border-green-400 focus-visible:ring-1 focus-visible:ring-green-400 focus-visible:ring-offset-2"
+                      />
+                      <div className="absolute left-0 top-[calc(50%-10px)] w-full flex justify-end px-4">
+                        <Link size={16} className="text-green-700" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="border-none shadow-none">
+                  <div>
+                    <Label htmlFor="material" className="text-green-800">
+                      Course Materials (Upload supporting files like PDFs,
+                      slides, or docs)*
+                    </Label>
+                  </div>
+                  <div className="mt-2">
+                    <div
+                      className="border-2 border-dashed border-green-200 rounded-lg p-6 text-center hover:border-green-300 transition-colors cursor-pointer"
+                      onClick={() => materialInput?.current?.click()}
+                    >
+                      <Upload className="w-10 h-10 text-green-400 mx-auto mb-3" />
+                      <p className="text-green-600 mb-1">
+                        Click to upload or drag and drop
+                      </p>
+                      <p className="text-sm text-green-500">
+                        PDF, PPT, DOCX (max 5MB each)
+                      </p>
+                    </div>
+
+                    {/* Preview uploaded materials */}
+                    {materials.length > 0 && (
+                      <div className="mt-4 space-y-2">
+                        {materials.map((file, idx) => (
+                          <div
+                            key={idx}
+                            className="flex items-center justify-between bg-green-50 border border-green-200 rounded-md px-3 py-2"
+                          >
+                            <span className="text-green-700 text-sm font-medium truncate max-w-[250px]">
+                              {file.name}
+                            </span>
+                            <button
+                              onClick={() => removeMaterial(idx)}
+                              className="ml-2 p-1 rounded-full bg-white border border-green-300 hover:bg-green-100"
+                            >
+                              <X className="w-4 h-4 text-green-600" />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  <input
+                    hidden
+                    ref={materialInput}
+                    type="file"
+                    multiple
+                    accept=".pdf,.doc,.docx,.ppt,.pptx"
+                    onChange={(e) => {
+                      const files = Array.from(e.target.files || []);
+                      setMaterials((prev) => [...prev, ...files]);
+                    }}
+                    id="material"
                   />
                 </div>
               </CardContent>
@@ -192,7 +258,7 @@ export default function NewCoursePage() {
                     </button>
                   </div>
                 ) : (
-                  <div className="border-2 border-dashed border-green-200 rounded-lg p-8 text-center hover:border-green-300 transition-colors cursor-pointer">
+                  <div className="border-2 border-dashed border-green-400 rounded-lg p-8 text-center hover:border-green-300 transition-colors cursor-pointer">
                     <Upload className="w-12 h-12 text-green-400 mx-auto mb-4" />
                     <p className="text-green-600 mb-2">
                       Click to upload or drag and drop
@@ -219,7 +285,7 @@ export default function NewCoursePage() {
 
         {/* Action Buttons */}
         <div className="flex justify-end space-x-4 mt-8 pt-6 border-t border-green-100">
-          <Btn text="Add School" onClick={() => {}} />
+          <Btn text="Add Course" onClick={() => {}} />
         </div>
       </div>
     </div>

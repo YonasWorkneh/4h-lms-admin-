@@ -41,13 +41,13 @@ export default function CourseCard({
             : description}
           .
         </p>
-        <div className="flex justify-between items-center mt-3">
+        {/* <div className="flex justify-between items-center mt-3">
           <div className="space-x-2 flex items-center">
             <Calendar />
             <span className="text-sm">{start}</span>
           </div>
-        </div>
-        <Link href={"#"}>
+        </div> */}
+        <Link href={`/course-list/${title.toLowerCase().split(" ").join("")}`}>
           <Button text="Details" styles="mt-4" />
         </Link>
       </div>
