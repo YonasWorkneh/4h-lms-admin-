@@ -45,11 +45,15 @@ export default function NewSemesterPage() {
           styles="!rounded-full px-6 py-1 mb-4"
           onClick={() => router.back()}
         />
-        <div className="mb-8">
-          <h1 className="text-3xl md:text-2xl font-bold text-green-900 mb-2">
+
+        {/* Header Section */}
+        <div className="mb-6 lg:mb-8">
+          <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-green-900 mb-4 sm:mb-6">
             Create New Semester
           </h1>
-          <nav className="flex space-x-2 m-6">
+
+          {/* Navigation Tabs */}
+          <nav className="flex flex-col sm:flex-row gap-2 sm:gap-0 sm:space-x-2 overflow-x-auto pb-2">
             {[
               { label: "Semester", step: 0 },
               { label: "Calendar", step: 1 },
@@ -60,39 +64,48 @@ export default function NewSemesterPage() {
                 key={item.label}
                 type="button"
                 onClick={() => setStep(idx)}
-                className={`pb-1 transition-colors `}
+                className={`pb-2 sm:pb-1 transition-colors text-left sm:text-center whitespace-nowrap ${
+                  idx > formSteps.length
+                    ? "opacity-50 cursor-not-allowed"
+                    : "cursor-pointer"
+                }`}
                 disabled={idx > formSteps.length}
               >
                 <span
-                  className={`border-b transistion ${
+                  className={`border-b-2 sm:border-b transition-colors text-sm sm:text-base ${
                     step === idx
                       ? "border-green-600 text-green-700 font-semibold"
                       : "border-transparent text-gray-400 hover:text-green-700"
                   }`}
                 >
                   {item.label}
-                </span>{" "}
-                <span className="text-gray-400">/</span>
+                </span>
+                {idx < 3 && (
+                  <span className="text-gray-400 ml-2 sm:ml-1">/</span>
+                )}
               </button>
             ))}
           </nav>
         </div>
-        <div className="m-6">
+
+        {/* Form Content */}
+        <div className="mb-6 lg:mb-8">
           {/* Render the current step */}
           <CurrentFormComponent />
         </div>
 
         {/* Action Buttons */}
-        <div className="flex justify-between space-x-4 mt-8 pt-6 border-t border-green-100 m-6">
+        <div className="flex flex-col sm:flex-row justify-between gap-3 sm:gap-4 pt-6 border-t border-green-100">
           <Button
             disabled={!step}
-            className="bg-gray-50 hover:bg-gray-100 text-black border border-gray-300 cursor-pointer"
+            className="bg-gray-50 hover:bg-gray-100 text-black border border-gray-300 cursor-pointer w-full sm:w-auto order-2 sm:order-1"
             onClick={() => setStep((prev) => Math.max(prev - 1, 0))}
           >
             Previous
           </Button>
           <Btn
             text={step === formSteps.length - 1 ? "Finish" : "Next"}
+            styles="w-full sm:w-auto order-1 sm:order-2"
             onClick={() =>
               setStep((prev) => Math.min(prev + 1, formSteps.length - 1))
             }

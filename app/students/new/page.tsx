@@ -41,101 +41,130 @@ export default function StudentRegistrationForm() {
   const router = useRouter();
 
   return (
-    <div className="container mx-auto px-4 py-4">
+    <div className="container mx-auto px-4 py-4 max-w-7xl">
       <Btn
         text="back"
         styles="!rounded-full !px-6 !py-1 mb-4"
         onClick={() => router.back()}
       />
 
-      <h1 className="text-2xl font-bold text-green-900 mb-6">
+      <h1 className="text-xl lg:text-2xl font-bold text-green-900 mb-6">
         Register New Student
       </h1>
 
-      <div className="grid lg:grid-cols-3 gap-8">
+      <div className="grid lg:grid-cols-3 gap-6 lg:gap-8">
         {/* Main Form */}
         <div className="lg:col-span-2 space-y-6">
           <Card className="border-green-100">
             <CardHeader>
-              <CardTitle className="text-green-800">
+              <CardTitle className="text-green-800 text-lg lg:text-xl">
                 Student Information
               </CardTitle>
-              <CardDescription className="text-green-600">
+              <CardDescription className="text-green-600 text-sm lg:text-base">
                 Enter basic student details
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label className="text-green-800">Name *</Label>
-                  <Input placeholder="Full Name" className="border-green-200" />
+                  <Label className="text-green-800 text-sm lg:text-base">
+                    Name *
+                  </Label>
+                  <Input
+                    placeholder="Full Name"
+                    className="border-green-200 text-sm lg:text-base"
+                  />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-green-800">Grade *</Label>
+                  <Label className="text-green-800 text-sm lg:text-base">
+                    Grade *
+                  </Label>
                   <Input
                     type="number"
                     placeholder="e.g 12"
-                    className="border-green-200"
+                    className="border-green-200 text-sm lg:text-base"
                   />
                 </div>
               </div>
-              <div className="grid md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label className="text-green-800">Phone *</Label>
-                  <Input placeholder="phone no." className="border-green-200" />
+                  <Label className="text-green-800 text-sm lg:text-base">
+                    Phone *
+                  </Label>
+                  <Input
+                    placeholder="phone no."
+                    className="border-green-200 text-sm lg:text-base"
+                  />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-green-800">Email </Label>
+                  <Label className="text-green-800 text-sm lg:text-base">
+                    Email
+                  </Label>
                   <Input
                     type="email"
                     placeholder="example@example.com"
-                    className="border-green-200"
+                    className="border-green-200 text-sm lg:text-base"
                   />
                 </div>
               </div>
-              <div className="grid md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label className="text-green-800">Gaurdian *</Label>
-                  <Input className="border-green-200" placeholder="Name" />
+                  <Label className="text-green-800 text-sm lg:text-base">
+                    Guardian *
+                  </Label>
+                  <Input
+                    className="border-green-200 text-sm lg:text-base"
+                    placeholder="Name"
+                  />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-green-800">Guradian contact *</Label>
-                  <Input className="border-green-200" placeholder="phone no." />
+                  <Label className="text-green-800 text-sm lg:text-base">
+                    Guardian Contact *
+                  </Label>
+                  <Input
+                    className="border-green-200 text-sm lg:text-base"
+                    placeholder="phone no."
+                  />
                 </div>
               </div>
             </CardContent>
           </Card>
         </div>
 
-        {/* Sidebar */}
-        <div>
+        {/* Image Upload Sidebar */}
+        <div className="order-first lg:order-last">
           <Card className="border-green-100">
             <CardHeader>
-              <CardTitle className="text-green-800">Student Image</CardTitle>
-              <CardDescription className="text-green-600">
+              <CardTitle className="text-green-800 text-lg lg:text-xl">
+                Student Image
+              </CardTitle>
+              <CardDescription className="text-green-600 text-sm lg:text-base">
                 Upload a profile photo
               </CardDescription>
             </CardHeader>
-            <CardContent onClick={() => thumbnail?.current.click()}>
+            <CardContent onClick={() => thumbnail?.current?.click()}>
               {image?.file ? (
-                <div className="relative w-fit">
+                <div className="relative w-fit mx-auto">
                   <Image
                     src={image.url}
                     alt="student-image"
                     width={200}
                     height={200}
+                    className="rounded-lg"
                   />
-                  <button className="absolute top-0 -right-5 bg-gray-50 border border-green-400 p-1 rounded-lg">
-                    <Pencil className="h-5 w-5 text-green-400" />
+                  <button className="absolute top-2 right-2 bg-white border border-green-400 p-1 rounded-lg shadow-sm">
+                    <Pencil className="h-4 w-4 text-green-400" />
                   </button>
                 </div>
               ) : (
-                <div className="border-2 border-dashed border-green-200 p-8 text-center rounded-lg cursor-pointer">
-                  <Upload className="w-12 h-12 text-green-400 mx-auto mb-4" />
-                  <p className="text-green-600">
+                <div className="border-2 border-dashed border-green-200 p-6 lg:p-8 text-center rounded-lg cursor-pointer hover:border-green-300 transition-colors">
+                  <Upload className="w-8 h-8 lg:w-12 lg:h-12 text-green-400 mx-auto mb-3 lg:mb-4" />
+                  <p className="text-green-600 text-sm lg:text-base">
                     Click or drag image to upload
                   </p>
-                  <p className="text-sm text-green-500">PNG, JPG up to 2MB</p>
+                  <p className="text-xs lg:text-sm text-green-500 mt-1">
+                    PNG, JPG up to 2MB
+                  </p>
                 </div>
               )}
             </CardContent>
@@ -157,8 +186,8 @@ export default function StudentRegistrationForm() {
       </div>
 
       {/* Submit Button */}
-      <div className="flex justify-end mt-8 pt-6 border-t border-green-100">
-        <Btn text="Register Student" />
+      <div className="flex flex-col sm:flex-row justify-end gap-3 mt-8 pt-6 border-t border-green-100">
+        <Btn text="Register Student" styles="w-full sm:w-auto" />
       </div>
     </div>
   );

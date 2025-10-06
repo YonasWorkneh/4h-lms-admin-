@@ -318,49 +318,64 @@ export default function page() {
   };
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-2 text-[var(--heading)]">
-        Students
-      </h1>
-      <p className="text-gray-600 flex gap-2 items-center mt-2">
-        Manage students &mdash; register , edit and enroll students.
-      </p>
+      {/* Header Section */}
+      <div className="mb-4 sm:mb-6">
+        <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-2 text-[var(--heading)]">
+          Students
+        </h1>
+        <p className="text-gray-600 text-xs sm:text-sm lg:text-base">
+          Manage students &mdash; register, edit and enroll students.
+        </p>
+      </div>
 
-      <nav className="mt-10">
-        <ul className="flex items-center gap-4">
-          {schools.map((school) => (
-            <li key={school.id}>
-              <button
-                className={`px-3 py-2 hover:bg-gradient-to-r border hover:from-green-500 hover:to-emerald-600 hover:text-white rounded-full flex gap-1 items-center ${
-                  active === school.id
-                    ? "text-white bg-gradient-to-r from-green-500 to-emerald-600"
-                    : "text-green-700 bg-white border-green-400"
-                }`}
-                onClick={() => setActive(school.id)}
-              >
-                <School size={16} />
-                <span>{school.name}</span>
-              </button>
-            </li>
-          ))}
-        </ul>
+      {/* School Filter Tabs */}
+      <nav className="mb-4 sm:mb-6 lg:mb-8">
+        <div className="overflow-x-auto pb-2">
+          <ul className="flex items-center gap-2 sm:gap-3 lg:gap-4 min-w-max lg:min-w-0">
+            {schools.map((school) => (
+              <li key={school.id}>
+                <button
+                  className={`px-2 sm:px-3 py-1.5 sm:py-2 hover:bg-gradient-to-r border hover:from-green-500 hover:to-emerald-600 hover:text-white rounded-full flex gap-1 items-center whitespace-nowrap text-xs sm:text-sm lg:text-base transition-colors ${
+                    active === school.id
+                      ? "text-white bg-gradient-to-r from-green-500 to-emerald-600"
+                      : "text-green-700 bg-white border-green-400"
+                  }`}
+                  onClick={() => setActive(school.id)}
+                >
+                  <School size={12} className="sm:w-3 sm:h-3 lg:w-4 lg:h-4" />
+                  <span>{school.name}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
       </nav>
-      <div className="flex justify-between items-center mt-10">
-        <SearchBar placeholder="Search student..." onSearch={() => {}} />
+
+      {/* Search and Add Button */}
+      <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3 sm:gap-4 mb-4 sm:mb-6 lg:mb-8">
+        <div className="w-full sm:w-auto sm:flex-1 sm:max-w-md">
+          <SearchBar placeholder="Search student..." onSearch={() => {}} />
+        </div>
         <Button
           text="+ Add New"
           onClick={() => {
             router.push("/students/new");
             return;
           }}
+          styles="w-full sm:w-auto whitespace-nowrap"
         />
       </div>
-      <List
-        items={students}
-        errMess="Try adding some students to see them here."
-        onEnroll={handleIndividualEnroll}
-        onBulkEnroll={handleBulkEnroll}
-        courses={courses}
-      />
+
+      {/* Students List */}
+      <div>
+        <List
+          items={students}
+          errMess="Try adding some students to see them here."
+          onEnroll={handleIndividualEnroll}
+          onBulkEnroll={handleBulkEnroll}
+          courses={courses}
+        />
+      </div>
     </div>
   );
 }

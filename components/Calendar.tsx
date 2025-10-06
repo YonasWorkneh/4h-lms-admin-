@@ -179,10 +179,13 @@ export default function Calendar() {
 
   return (
     <>
-      <div className="flex bg-white/50 p-2">
-        <div className="flex-1 flex flex-col">
-          <div className="space-y-1 p-4 py-0">
-            <Label htmlFor="title" className="text-green-800">
+      <div className="bg-white/50 rounded-lg overflow-hidden">
+        <div className="flex flex-col">
+          <div className="space-y-2 p-3 sm:p-4">
+            <Label
+              htmlFor="title"
+              className="text-green-800 text-sm sm:text-base"
+            >
               Calendar Name *
             </Label>
             <Input
@@ -190,9 +193,10 @@ export default function Calendar() {
               placeholder="e.g., Y2025T1-Calendar"
               value={name}
               onChange={(e) => setCalendarName(e.target.value)}
-              className="border-green-400 w-1/2 focus-visible:ring-1 focus-visible:ring-green-400 focus-visible:ring-offset-2"
+              className="border-green-400 w-full sm:w-1/2 focus-visible:ring-1 focus-visible:ring-green-400 focus-visible:ring-offset-2 text-sm sm:text-base"
             />
           </div>
+
           <CalendarHeader
             currentDate={currentDate}
             onToday={goToToday}
@@ -207,29 +211,30 @@ export default function Calendar() {
             onEventClick={handleEventClick}
           />
         </div>
+      </div>
 
-        <EventModal
-          isOpen={isModalOpen}
-          onClose={() => {
-            setIsModalOpen(false);
-            setSelectedDate(null);
-          }}
-          onSave={handleCreateEvent}
-          selectedDate={selectedDate}
-        />
-        <EventDetailsModal
-          isOpen={detailOpened}
-          event={selectedEvent}
-          onClose={() => {
-            setSelectedEvent(null);
-            setDetailOpened(false);
-          }}
-          onDelete={handleDelete}
-        />
+      <div className="bg-white/50 p-4 sm:p-6 lg:p-8 rounded-lg mt-4">
+        <Button text="Save Calendar" styles="w-full sm:w-auto" />
       </div>
-      <div className="bg-white/50 p-8">
-        <Button text="Save Calendar" />
-      </div>
+
+      <EventModal
+        isOpen={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
+          setSelectedDate(null);
+        }}
+        onSave={handleCreateEvent}
+        selectedDate={selectedDate}
+      />
+      <EventDetailsModal
+        isOpen={detailOpened}
+        event={selectedEvent}
+        onClose={() => {
+          setSelectedEvent(null);
+          setDetailOpened(false);
+        }}
+        onDelete={handleDelete}
+      />
     </>
   );
 }

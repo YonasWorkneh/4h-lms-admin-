@@ -16,29 +16,41 @@ const Header: React.FC = () => {
   useEffect(() => {
     if (isLogged) setMount(true);
   }, [mount]);
-  if (!mount) null;
+  if (!mount) return null;
   return (
     <div
-      className={`bg-white border-b border-gray-100 px-8 py-4 ${
+      className={`bg-white border-b border-gray-100 px-4 lg:px-8 py-4 ${
         isLogin && "hidden"
       }`}
     >
       <div className="flex items-center justify-between">
-        {/* Search Bar */}
-        <SearchBar
-          showIcon={true}
-          placeholder="Search courses, schools, ..."
-          onSearch={() => {}}
-        />
+        {/* Search Bar - Hidden on mobile, shown on desktop */}
+        <div className="hidden lg:block flex-1 max-w-md">
+          <SearchBar
+            showIcon={true}
+            placeholder="Search courses, schools, ..."
+            onSearch={() => {}}
+          />
+        </div>
+
+        {/* Mobile Search Icon */}
+        <div className="lg:hidden">
+          <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">
+            <Search className="w-5 h-5" />
+          </button>
+        </div>
+
         {/* Right Section */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 lg:gap-4">
+          {/* Notifications */}
           <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">
             <Bell className="w-5 h-5" />
           </button>
 
           {/* User Profile */}
-          <div className="flex items-center gap-3 pl-4 border-l border-gray-200">
-            <div className="text-right">
+          <div className="flex items-center gap-2 lg:gap-3 pl-2 lg:pl-4 border-l border-gray-200">
+            {/* Desktop User Info */}
+            <div className="hidden lg:block text-right">
               <p className="text-sm font-medium text-gray-900">
                 {"Beza Tesfaye"}
               </p>
@@ -46,8 +58,19 @@ const Header: React.FC = () => {
                 {"beza.tesfaye@asfwa.com"}
               </p>
             </div>
-            <div className="w-10 h-10 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center">
-              <span className="text-white font-medium text-sm">{"BT"}</span>
+
+            {/* Mobile User Info - Just Name */}
+            <div className="lg:hidden text-right">
+              <p className="text-sm font-medium text-gray-900">
+                {"Beza Tesfaye"}
+              </p>
+            </div>
+
+            {/* User Avatar */}
+            <div className="w-8 h-8 lg:w-10 lg:h-10 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center">
+              <span className="text-white font-medium text-xs lg:text-sm">
+                {"BT"}
+              </span>
             </div>
           </div>
         </div>

@@ -11,12 +11,17 @@ import {
   School,
   Users,
   LayoutDashboard,
+  Menu,
+  X,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 
 const Sidebar: React.FC = () => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [mount, setMount] = useState(false);
+
   const menuItems = [
     {
       id: "dashboard",
@@ -77,18 +82,37 @@ const Sidebar: React.FC = () => {
   const isIndex = !nonIndex.includes(pathName);
   const isLogin = pathName.includes("login");
   const isLogged = localStorage.getItem("isLogged");
-  const [mount, setMount] = useState(false);
 
   useEffect(() => {
     if (isLogged) setMount(true);
   }, [mount]);
-  if (!mount) null;
-  return (
-    <div
-      className={`w-64 bg-white h-screen shadow-sm border-r border-gray-100 flex flex-col ${
-        isLogin && "hidden"
-      }`}
-    >
+
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [pathName]);
+
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+
+    // Cleanup on unmount
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isMobileMenuOpen]);
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  // Menu content component
+  const MenuContent = ({ onLinkClick }: { onLinkClick?: () => void }) => (
+    <>
       {/* Logo */}
       <div className="p-6 border-b border-gray-100">
         <div className="flex items-center gap-2">
@@ -115,6 +139,7 @@ const Sidebar: React.FC = () => {
                 <Link
                   href={item.href}
                   key={item.id}
+                  onClick={onLinkClick}
                   className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                     pathName.includes(item.id)
                       ? "bg-green-50 text-green-700 border-r-2 border-green-600"
@@ -147,7 +172,8 @@ const Sidebar: React.FC = () => {
                 <Link
                   href={item.href}
                   key={item.id}
-                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors ${
+                  onClick={onLinkClick}
+                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                     pathName.includes(item.id)
                       ? "bg-green-50 text-green-700 border-r-2 border-green-600"
                       : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
@@ -161,7 +187,69 @@ const Sidebar: React.FC = () => {
           </nav>
         </div>
       </div>
-    </div>
+    </>
+  );
+
+  if (!mount) return null;
+
+  return (
+    <>
+      {/* Mobile Hamburger Button */}
+      <div
+        className={`lg:hidden fixed top-4 left-4 z-50 ${isLogin && "hidden"}`}
+      >
+        <button
+          onClick={toggleMobileMenu}
+          className="p-2 rounded-md bg-white shadow-md border border-gray-200 hover:bg-gray-50 transition-colors"
+          aria-label="Toggle menu"
+        >
+          {isMobileMenuOpen ? (
+            <X className="h-6 w-6 text-gray-600" />
+          ) : (
+            <Menu className="h-6 w-6 text-gray-600" />
+          )}
+        </button>
+      </div>
+
+      {/* Mobile Backdrop */}
+      {isMobileMenuOpen && (
+        <div
+          className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+      )}
+
+      {/* Desktop Sidebar */}
+      <div
+        className={`hidden lg:flex w-64 bg-white h-screen shadow-sm border-r border-gray-100 flex-col ${
+          isLogin && "hidden"
+        }`}
+      >
+        <MenuContent />
+      </div>
+
+      {/* Mobile Sidebar */}
+      <div
+        className={`lg:hidden fixed top-0 left-0 h-screen w-64 bg-white shadow-lg border-r border-gray-100 flex flex-col z-50 transform transition-transform duration-300 ease-in-out ${
+          isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+        } ${isLogin && "hidden"}`}
+      >
+        {/* Mobile Header with Close Button */}
+
+        <button
+          onClick={() => setIsMobileMenuOpen(false)}
+          className="p-1 rounded-md hover:bg-gray-100 transition-colors absolute top-2 right-2"
+          aria-label="Close menu"
+        >
+          <X className="h-5 w-5 text-gray-600" />
+        </button>
+
+        {/* Mobile Menu Content */}
+        <div className="flex-1 overflow-y-auto">
+          <MenuContent onLinkClick={() => setIsMobileMenuOpen(false)} />
+        </div>
+      </div>
+    </>
   );
 };
 

@@ -62,35 +62,43 @@ export default function Page() {
   ];
   const router = useRouter();
   return (
-    <div>
-      <div>
-        <div>
-          <h1 className="text-3xl font-bold mb-2 text-[var(--heading)]">
-            Semester
-          </h1>
-          <p className="text-gray-600">
-            Manage semester schedules{" "}
-            <span className="text-green-700">&mdash;</span> add school, course,
-            students, instructors and timeline etc.
-          </p>
-        </div>
-        <div className="mt-4 flex justify-between items-center">
+    <div className="min-h-screen">
+      {/* Header Section */}
+      <div className="mb-4 sm:mb-6">
+        <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-2 text-[var(--heading)]">
+          Semester
+        </h1>
+        <p className="text-gray-600 text-xs sm:text-sm lg:text-base">
+          Manage semester schedules{" "}
+          <span className="text-green-700">&mdash;</span> add school, course,
+          students, instructors and timeline etc.
+        </p>
+      </div>
+
+      {/* Search and Add Button */}
+      <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
+        <div className="w-full sm:w-auto sm:flex-1 sm:max-w-md">
           <SearchBar
             placeholder="Search semester by year ..."
             onSearch={() => {
               console.log("");
             }}
           />
-          <Link href={"/semester/new"}>
-            <Button text="+ Add New " />
-          </Link>
         </div>
-        <ul className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-6">
-          {schools.map((course, index) => (
-            <SemesterCard />
-          ))}
-        </ul>
+        <Link href={"/semester/new"}>
+          <Button
+            text="+ Add New"
+            styles="w-full sm:w-auto whitespace-nowrap"
+          />
+        </Link>
       </div>
+
+      {/* Semester Cards Grid */}
+      <ul className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+        {schools.map((course, index) => (
+          <SemesterCard key={index} />
+        ))}
+      </ul>
     </div>
   );
 }

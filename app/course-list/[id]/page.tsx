@@ -95,51 +95,107 @@ export default function page() {
 
   const { img, title, description, lessPlan } = course;
   return (
-    <div className="grid grid-cols-2 gap-4">
-      <div
-        className={`w-full h-[500px] rounded-t-md`}
-        style={{
-          background: `url(${img})`,
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      />
-      <div>
-        <h1 className="text-5xl font-bold text-green-700 mt-2">{title}</h1>
-        <p className="mt-5">{description}</p>
-        <Link
-          href={lessPlan}
-          target="_blank"
-          className="underline decoration-green-600 flex gap-1 items-center mt-2"
-        >
-          <LinkIcon className="text-green-700" size={15} />
-          <span>Lesson plan</span>
-        </Link>
-        <div className="mt-10">
-          <label htmlFor="status">Course Status</label>{" "}
-          <Select value="1">
-            <SelectTrigger
-              id="term"
-              className="border-green-400 shadow-none focus-visible:ring-0 focus-visible:outline-none focus:outline-none focus:ring-0 w-1/2 mt-1"
+    <div className="min-h-screen">
+      {/* Mobile Layout */}
+      <div className="md:hidden space-y-6">
+        {/* Course Image */}
+        <div
+          className="w-full h-48 sm:h-64 rounded-lg"
+          style={{
+            background: `url(${img})`,
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        />
+
+        {/* Course Info */}
+        <div className="space-y-4">
+          <h1 className="text-2xl sm:text-3xl font-bold text-green-700">
+            {title}
+          </h1>
+          <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
+            {description}
+          </p>
+
+          <Link
+            href={lessPlan}
+            target="_blank"
+            className="inline-flex items-center gap-2 text-green-600 hover:text-green-700 text-sm sm:text-base underline decoration-green-600"
+          >
+            <LinkIcon className="text-green-700" size={16} />
+            <span>Lesson plan</span>
+          </Link>
+
+          <div className="space-y-2">
+            <label
+              htmlFor="status"
+              className="block text-sm font-medium text-gray-700"
             >
-              <SelectValue placeholder="Select status" />
-            </SelectTrigger>
-            <SelectContent className="focus-visible:ring-green-400 focus-visible:ring-offset-2">
-              <SelectItem
-                value={"1"}
-                className="shadow-none focus-visible:ring-0 focus-visible:outline-none focus:outline-none focus:ring-0"
+              Course Status
+            </label>
+            <Select value="1">
+              <SelectTrigger
+                id="term"
+                className="border-green-400 focus-visible:ring-1 focus-visible:ring-green-400 focus-visible:ring-offset-2 w-full"
               >
-                Pending
-              </SelectItem>
-              <SelectItem
-                className="shadow-none focus-visible:ring-0 focus-visible:outline-none focus:outline-none focus:ring-0"
-                value="2"
+                <SelectValue placeholder="Select status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="1">Pending</SelectItem>
+                <SelectItem value="2">Approved</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+      </div>
+
+      {/* Desktop Layout */}
+      <div className="hidden md:grid grid-cols-2 gap-6 lg:gap-8">
+        <div
+          className="w-full h-80 lg:h-96 rounded-lg"
+          style={{
+            background: `url(${img})`,
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        />
+        <div className="space-y-6">
+          <h1 className="text-3xl lg:text-4xl font-bold text-green-700">
+            {title}
+          </h1>
+          <p className="text-gray-600 leading-relaxed">{description}</p>
+
+          <Link
+            href={lessPlan}
+            target="_blank"
+            className="inline-flex items-center gap-2 text-green-600 hover:text-green-700 underline decoration-green-600"
+          >
+            <LinkIcon className="text-green-700" size={18} />
+            <span>Lesson plan</span>
+          </Link>
+
+          <div className="space-y-3">
+            <label
+              htmlFor="status"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Course Status
+            </label>
+            <Select value="1">
+              <SelectTrigger
+                id="term"
+                className="border-green-400 focus-visible:ring-1 focus-visible:ring-green-400 focus-visible:ring-offset-2 w-1/2"
               >
-                Approved
-              </SelectItem>
-            </SelectContent>
-          </Select>
+                <SelectValue placeholder="Select status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="1">Pending</SelectItem>
+                <SelectItem value="2">Approved</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
       </div>
     </div>

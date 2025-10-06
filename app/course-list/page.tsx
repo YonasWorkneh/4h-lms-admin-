@@ -65,27 +65,37 @@ export default function page() {
 
   return (
     <div>
-      <div>
-        <h1 className="text-3xl font-bold mb-2 text-[var(--heading)]">
+      {/* Header Section */}
+      <div className="mb-4 sm:mb-6">
+        <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-2 text-[var(--heading)]">
           Courses
         </h1>
-        <p className="text-gray-600">
+        <p className="text-gray-600 text-xs sm:text-sm lg:text-base">
           Manage courses <span className="text-green-700">&mdash;</span> create,
           edit and delete courses.
         </p>
       </div>
-      <div className="mt-4 flex justify-between items-center">
-        <SearchBar
-          placeholder="Search for courses"
-          onSearch={() => {
-            console.log("");
-          }}
-        />
+
+      {/* Search and Create Button */}
+      <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
+        <div className="w-full sm:w-auto sm:flex-1 sm:max-w-md">
+          <SearchBar
+            placeholder="Search for courses"
+            onSearch={() => {
+              console.log("");
+            }}
+          />
+        </div>
         <Link href={"/course-list/new"}>
-          <Button text="+ Create New " />
+          <Button
+            text="+ Create New"
+            styles="w-full sm:w-auto whitespace-nowrap"
+          />
         </Link>
       </div>
-      <ul className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-6">
+
+      {/* Courses Grid */}
+      <ul className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
         {courses.map((course, index) => (
           <CourseCard
             key={index}

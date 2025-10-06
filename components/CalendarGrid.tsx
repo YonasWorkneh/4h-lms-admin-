@@ -79,13 +79,13 @@ export default function CalendarGrid({
   };
 
   return (
-    <div className="flex-1 p-4 py-0">
+    <div className="flex-1 p-2 sm:p-4 py-0">
       {/* Day headers */}
       <div className="grid grid-cols-7">
         {dayNames.map((day) => (
           <div
             key={day}
-            className="p-2 text-xs font-medium text-gray-600 text-center"
+            className="p-1 sm:p-2 text-xs font-medium text-gray-600 text-center"
           >
             {day}
           </div>
@@ -102,29 +102,33 @@ export default function CalendarGrid({
               key={index}
               onClick={() => onDateClick(day.date)}
               className={cn(
-                "min-h-[120px] p-2 border-r border-b border-gray-200 cursor-pointer hover:bg-green-50 transition-colors",
+                "min-h-[50px] sm:min-h-[100px] lg:min-h-[120px] p-1 sm:p-2 border-r border-b border-gray-200 cursor-pointer hover:bg-green-50 transition-colors",
                 !day.isCurrentMonth && "text-gray-400 bg-green-50/50",
                 day.isToday && "bg-green-50"
               )}
             >
               <div
                 className={cn(
-                  "text-sm font-medium mb-1",
+                  "text-xs sm:text-sm font-medium mb-1",
                   day.isToday &&
-                    "w-6 h-6 bg-green-600 text-white rounded-full flex items-center justify-center text-xs"
+                    "w-5 h-5 sm:w-6 sm:h-6 bg-green-600 text-white rounded-full flex items-center justify-center text-xs"
                 )}
               >
                 {day.date.getDate()}
               </div>
 
               {/* Events */}
-              <div className="space-y-1">
-                {dayEvents.map((event) => (
-                  <div className="flex gap-2 items-center">
-                    <span className="text-xs">{event.time?.split("-")[0]}</span>
+              <div className="space-y-0.5 sm:space-y-1">
+                {dayEvents.slice(0, 2).map((event, eventIndex) => (
+                  <div
+                    key={event.id}
+                    className="flex gap-1 sm:gap-2 items-center"
+                  >
+                    <span className="text-xs hidden sm:inline">
+                      {event.time?.split("-")[0]}
+                    </span>
                     <div
-                      key={event.id}
-                      className="text-xs p-1 w-[100px] bg-green-600 text-white rounded truncate"
+                      className="text-xs p-0.5 sm:p-1 w-full sm:w-[100px] bg-green-600 text-white rounded truncate cursor-pointer hover:bg-green-700 transition-colors"
                       onClick={(e) => {
                         e.stopPropagation();
                         onEventClick(event.id);
@@ -134,6 +138,11 @@ export default function CalendarGrid({
                     </div>
                   </div>
                 ))}
+                {dayEvents.length > 2 && (
+                  <div className="text-xs text-gray-500 truncate">
+                    +{dayEvents.length - 2} more
+                  </div>
+                )}
               </div>
             </div>
           );
