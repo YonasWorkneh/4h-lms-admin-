@@ -9,14 +9,31 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { MoreHorizontal, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  MoreHorizontal,
+  ChevronLeft,
+  ChevronRight,
+  GraduationCap,
+} from "lucide-react";
 import { useState } from "react";
 
 export default function List({
   items = [],
   errMess = "Try adding some users to see them here.",
+  onEnroll,
+  onBulkEnroll,
+  courses = [],
 }) {
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedItems, setSelectedItems] = useState<string[]>([]);
+  const [selectAll, setSelectAll] = useState(false);
   const itemsPerPage = 8;
   const totalPages = Math.ceil(items.length / itemsPerPage);
 
@@ -24,8 +41,82 @@ export default function List({
   const indexOfFirstUser = indexOfLastUser - itemsPerPage;
   const currentItems = items.slice(indexOfFirstUser, indexOfLastUser);
 
+  // Handle individual item selection
+  const handleItemSelect = (itemId: string) => {
+    setSelectedItems((prev) =>
+      prev.includes(itemId)
+        ? prev.filter((id) => id !== itemId)
+        : [...prev, itemId]
+    );
+  };
+
+  // Handle select all
+  const handleSelectAll = () => {
+    if (selectAll) {
+      setSelectedItems([]);
+    } else {
+      setSelectedItems(currentItems.map((item: any) => item.id));
+    }
+    setSelectAll(!selectAll);
+  };
+
+  // Handle individual enrollment
+  const handleIndividualEnroll = (studentId: string, courseId: string) => {
+    if (onEnroll) {
+      onEnroll(studentId, courseId);
+    }
+  };
+
+  // Handle bulk enrollment
+  const handleBulkEnroll = (courseId: string) => {
+    if (onBulkEnroll && selectedItems.length > 0) {
+      onBulkEnroll(selectedItems, courseId);
+      setSelectedItems([]);
+      setSelectAll(false);
+    }
+  };
+
   return (
     <div className="container p-4 px-0">
+      {/* Bulk Actions Bar */}
+      {selectedItems.length > 0 && (
+        <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <GraduationCap className="h-5 w-5 text-green-600" />
+              <span className="text-sm font-medium text-green-800">
+                {selectedItems.length} student
+                {selectedItems.length !== 1 ? "s" : ""} selected
+              </span>
+            </div>
+            <div className="flex items-center gap-3">
+              <Select onValueChange={handleBulkEnroll}>
+                <SelectTrigger className="w-64">
+                  <SelectValue placeholder="Select course to enroll" />
+                </SelectTrigger>
+                <SelectContent>
+                  {courses.map((course: any) => (
+                    <SelectItem key={course.id} value={course.id}>
+                      {course.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  setSelectedItems([]);
+                  setSelectAll(false);
+                }}
+              >
+                Cancel
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="bg-white/70 rounded-lg shadow overflow-hidden">
         {/* Table Header */}
         <div className="grid grid-cols-[40px_1fr_150px_150px_40px] items-center border-b py-3 px-4 text-sm font-medium text-gray-500">
@@ -33,10 +124,12 @@ export default function List({
             id="select-all"
             aria-label="Select all students"
             className="accent-green-600"
+            checked={selectAll}
+            onCheckedChange={handleSelectAll}
           />
           <div>Name</div>
           <div>Status</div>
-          <div>Enrolled</div>
+          <div>Registered</div>
           <div className="sr-only">Actions</div>
         </div>
 
@@ -57,6 +150,8 @@ export default function List({
                 <Checkbox
                   id={`select-item-${item.id}`}
                   aria-label={`Select item ${item.name}`}
+                  checked={selectedItems.includes(item.id)}
+                  onCheckedChange={() => handleItemSelect(item.id)}
                 />
                 <div className="flex items-center gap-3">
                   <Avatar className="h-10 w-10">
@@ -89,6 +184,26 @@ export default function List({
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem>View User</DropdownMenuItem>
                     <DropdownMenuItem>Edit User</DropdownMenuItem>
+                    <DropdownMenuItem className="flex items-center gap-2">
+                      <GraduationCap className="h-4 w-4" />
+                      <span>Enroll in Course</span>
+                      <Select
+                        onValueChange={(courseId) =>
+                          handleIndividualEnroll(item.id, courseId)
+                        }
+                      >
+                        <SelectTrigger className="w-48 ml-2">
+                          <SelectValue placeholder="Select course" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {courses.map((course: any) => (
+                            <SelectItem key={course.id} value={course.id}>
+                              {course.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </DropdownMenuItem>
                     <DropdownMenuItem>Delete User</DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>

@@ -15,6 +15,16 @@ const schools = [
   { id: 5, name: "Bole Highschool" },
 ];
 
+// Mock courses data
+const courses = [
+  { id: "1", name: "Web Development Fundamentals" },
+  { id: "2", name: "Digital Marketing Basics" },
+  { id: "3", name: "Graphic Design Principles" },
+  { id: "4", name: "Basic English Communication" },
+  { id: "5", name: "Scratch Programming" },
+  { id: "6", name: "Know Your Globe" },
+];
+
 const students = [
   {
     id: "1",
@@ -271,10 +281,41 @@ const students = [
 export default function page() {
   const [active, setActive] = useState<number>(1);
   const [shuffledStudents, setShuffledStudents] = useState(students);
+
   useEffect(() => {
     setShuffledStudents((prev) => prev.sort(() => Math.random() - 0.5));
   }, [active]);
+
   const router = useRouter();
+
+  // Handle individual student enrollment
+  const handleIndividualEnroll = (studentId: string, courseId: string) => {
+    const student = students.find((s) => s.id === studentId);
+    const course = courses.find((c) => c.id === courseId);
+
+    if (student && course) {
+      console.log(`Enrolling ${student.name} in ${course.name}`);
+      // Here you would typically make an API call to enroll the student
+      // For now, we'll just log the action
+      alert(`Successfully enrolled ${student.name} in ${course.name}`);
+    }
+  };
+
+  // Handle bulk student enrollment
+  const handleBulkEnroll = (studentIds: string[], courseId: string) => {
+    const selectedStudents = students.filter((s) => studentIds.includes(s.id));
+    const course = courses.find((c) => c.id === courseId);
+
+    if (selectedStudents.length > 0 && course) {
+      const studentNames = selectedStudents.map((s) => s.name).join(", ");
+      console.log(`Bulk enrolling students: ${studentNames} in ${course.name}`);
+      // Here you would typically make an API call to enroll multiple students
+      // For now, we'll just log the action
+      alert(
+        `Successfully enrolled ${selectedStudents.length} students in ${course.name}`
+      );
+    }
+  };
   return (
     <div>
       <h1 className="text-3xl font-bold mb-2 text-[var(--heading)]">
@@ -316,6 +357,9 @@ export default function page() {
       <List
         items={students}
         errMess="Try adding some students to see them here."
+        onEnroll={handleIndividualEnroll}
+        onBulkEnroll={handleBulkEnroll}
+        courses={courses}
       />
     </div>
   );
